@@ -1,0 +1,22 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "CS 5805: Machine Learning Course Project"
+  navbar:
+    left:
+      - about.qmd
+      - blog0.qmd
+      - blog3.qmd
+      - blog4.qmd
+      - blog5.qmd
+
+format:
+  html:
+    theme: cerulean
+    css: styles.css
+    toc: true
+
+
+

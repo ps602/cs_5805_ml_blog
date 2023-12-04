@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>CS 5805: Machine Learning Course Project - Probability Theory and Random Variables</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">CS 5805: Machine Learning Course Project</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./about.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Probability Theory and Random Variables</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./blog0.html" rel="" target="">
+ <span class="menu-text">Clustering</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./blog3.html" rel="" target="">
+ <span class="menu-text">Linear and Non-Linear Regression</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./blog4.html" rel="" target="">
+ <span class="menu-text">Classification</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./blog5.html" rel="" target="">
+ <span class="menu-text">Anomaly Detection</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools ms-auto">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#probability-theory" id="toc-probability-theory" class="nav-link active" data-scroll-target="#probability-theory">Probability Theory</a>
+  <ul class="collapse">
+  <li><a href="#key-probability-rules" id="toc-key-probability-rules" class="nav-link" data-scroll-target="#key-probability-rules">Key Probability Rules</a></li>
+  <li><a href="#types-of-probability" id="toc-types-of-probability" class="nav-link" data-scroll-target="#types-of-probability">Types of Probability</a></li>
+  </ul></li>
+  <li><a href="#random-variables" id="toc-random-variables" class="nav-link" data-scroll-target="#random-variables">Random Variables</a>
+  <ul class="collapse">
+  <li><a href="#probability-distributions" id="toc-probability-distributions" class="nav-link" data-scroll-target="#probability-distributions">Probability Distributions</a></li>
+  <li><a href="#expected-value-and-variance" id="toc-expected-value-and-variance" class="nav-link" data-scroll-target="#expected-value-and-variance">Expected Value and Variance</a></li>
+  <li><a href="#joint-probability-distributions" id="toc-joint-probability-distributions" class="nav-link" data-scroll-target="#joint-probability-distributions">Joint Probability Distributions</a></li>
+  <li><a href="#marginal-probability-distributions" id="toc-marginal-probability-distributions" class="nav-link" data-scroll-target="#marginal-probability-distributions">Marginal Probability Distributions</a></li>
+  </ul></li>
+  <li><a href="#conditional-probability" id="toc-conditional-probability" class="nav-link" data-scroll-target="#conditional-probability">Conditional Probability</a>
+  <ul class="collapse">
+  <li><a href="#bayes-theorem" id="toc-bayes-theorem" class="nav-link" data-scroll-target="#bayes-theorem">Bayes’ Theorem</a></li>
+  </ul></li>
+  <li><a href="#probabilistic-models-naive-bayes-classifier" id="toc-probabilistic-models-naive-bayes-classifier" class="nav-link" data-scroll-target="#probabilistic-models-naive-bayes-classifier">Probabilistic Models: Naive Bayes Classifier</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Probability Theory and Random Variables</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>In the tapestry of our daily experiences, uncertainty weaves its intricate threads, creating a landscape where the unknown is an ever-present companion. From deciding whether to carry an umbrella to predicting stock market trends, uncertainty surrounds us, shaping our decisions, actions, and perceptions. It is this pervasive uncertainty that beckons us to explore the realm of probability theory, a powerful tool that empowers us to navigate the unpredictable nature of the world.</p>
+<p>Enter probability theory, a mathematical framework designed to bring order to the chaos of uncertainty. Probability theory provides us with a systematic way to quantify and analyze uncertainty, offering a language to express the likelihood of different outcomes. It serves as a compass, guiding us through the fog of unpredictability and enabling us to make informed decisions in the face of ambiguity.</p>
+<p><img src="die.jpg" class="img-fluid" width="300"></p>
+<p>At its core, probability theory explores the likelihood of events occurring in various situations. It equips us with the means to assign numerical values to the uncertainty inherent in any scenario, allowing us to make reasoned predictions and choices. Whether predicting the outcome of a dice roll or estimating the probability of a rare disease occurrence, probability theory provides the analytical tools essential for decision-making in uncertain environments.</p>
+<p>In the following exploration of probability theory and random variables, we will unravel the intricacies of this indispensable field, delving into its fundamental concepts, applications in real life, and the ways it shapes our understanding of uncertainty. Join us on this journey as we unveil the mathematical underpinnings that empower us to confront the unpredictable with confidence and insight.</p>
+<section id="probability-theory" class="level1">
+<h1>Probability Theory</h1>
+<p>Probability is a measure of the likelihood that a particular event will occur. In the context of probability theory, we assign a numerical value between 0 and 1 to represent the probability of an event. A probability of 0 indicates that the event will not occur, while a probability of 1 signifies certainty that the event will occur. For events between these extremes, the probability reflects the degree of likelihood.</p>
+<p>The foundation of probability theory lies in understanding the set of all possible outcomes of an experiment, known as the sample space. The sample space, often denoted by a random S, encompasses every conceivable outcome of a random process. For instance, when rolling a six-sided die, the sample space is {1, 2, 3, 4, 5, 6}. Understanding the sample space is crucial for defining and calculating probabilities.</p>
+<p>An event is a subset of the sample space, representing a specific outcome or a combination of outcomes. Events are denoted by letters such as A, B, or C. For example, when rolling a die, the event of getting an even number can be denoted as A = {2,4,6}. Events can be simple (a single outcome) or compound (a combination of outcomes).</p>
+<section id="key-probability-rules" class="level2">
+<h2 class="anchored" data-anchor-id="key-probability-rules">Key Probability Rules</h2>
+<p><strong>1. Probability of any Event:</strong> The probability of an event A in the sample space S, P(A) cannot be negative or more than 1. The probability of all the events in the sample space S adds to 1.</p>
+<pre><code>        P(A) ≥ 0
+
+        P(A) ≤ 1
+
+        P(S) = 1</code></pre>
+<p><strong>2. Addition Rule:</strong> The addition rule is a fundamental concept that deals with the probability of the union of two or more events. For two events A and B, the probability of their union (A ∪ B) is given by:</p>
+<pre><code>        P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</code></pre>
+<p>This formula accounts for the overlap between events A and B to avoid double-counting. The probability of the intersection P(A∩B) is subtracted to ensure accuracy.</p>
+<p><strong>3. Bayes Rule:</strong> The multiplication rule governs the probability of the intersection of two events. For two events A and B, the probability of their intersection (A∩B) is given by:</p>
+<pre><code>        P(A ∩ B) = P(A)⋅P(B∣A)</code></pre>
+<p>Here, P(B∣A) represents the conditional probability of event B occurring given that event A has occurred. It expresses the probability of B within the context of A.</p>
+<p><strong>4. Independence Rule:</strong> Two events, A and B, are considered independent if the occurrence (or non-occurrence) of one event has no influence on the probability of the other event.</p>
+<pre><code>        P(A ∩ B) = P(A)⋅P(B)
+
+        P(A∣B) = P(A) and P(B∣A) = P(B)</code></pre>
+<p>These fundamental probability rules lay the groundwork for more complex probability calculations, enabling us to analyze and predict the likelihood of various outcomes in uncertain scenarios. They are essential tools for decision-making and risk assessment in diverse fields, from statistics to finance and beyond.</p>
+</section>
+<section id="types-of-probability" class="level2">
+<h2 class="anchored" data-anchor-id="types-of-probability">Types of Probability</h2>
+<p>Probability comes in various forms, each serving a specific purpose in different contexts. Here are three types of probability: classical, empirical, and subjective, along with real-world examples to illustrate each:</p>
+<p><strong>Classical Probability</strong></p>
+<p>Classical probability is based on equally likely outcomes in a sample space. It assumes that each outcome in the sample space is equally likely to occur.</p>
+<p>Example: Consider a fair coin. The sample space is {Heads, Tails}, and since the coin is fair, each outcome is equally likely. The probability of getting Heads or Tails is 0.5 or 50%.</p>
+<p><strong>Empircal Probability</strong></p>
+<p>Empirical probability is based on observed data. It involves calculating the probability of an event by analyzing data collected from actual experiments or observations.</p>
+<p>Example: Suppose you want to know the probability of rain in a particular city. Empirical probability would involve collecting data over time, noting the days with rain, and calculating the ratio of rainy days to the total number of days. If it rained on 30 out of 90 days, the empirical probability would be 0.333 or approximately 33.3%.</p>
+<p><strong>Subjective Probability</strong></p>
+<p>Subjective probability is based on personal judgment, beliefs, or opinions. It reflects an individual’s subjective assessment of the likelihood of an event.</p>
+<p>Example: A doctor might assign a subjective probability to the likelihood of a patient having a particular illness based on their experience, knowledge, and the patient’s symptoms. This probability is subjective and varies from one medical professional to another.</p>
+</section>
+</section>
+<section id="random-variables" class="level1">
+<h1>Random Variables</h1>
+<p>A random variable is a mathematical function that assigns a real number to each outcome in the sample space of a random experiment. In simpler terms, it is a variable whose value is subject to variations due to chance or randomness. Random variables are used to model and quantify uncertainty in various situations.</p>
+<p>Random variables play a crucial role in modeling uncertain quantities by providing a way to represent and analyze the variability inherent in random processes. They allow us to attach numerical values to outcomes of interest, facilitating the application of mathematical and statistical methods to describe, analyze, and make predictions about uncertain events.</p>
+<p><strong>Discrete Random Variable</strong></p>
+<p>Discrete random variables take values on a finite or countably infinite subset of R such as the integers. They are used to model discrete numerical quantities: the outcome of the roll of a die, the score in a basketball game, etc.</p>
+<p><strong>Continuous Random Variables</strong></p>
+<p>A continuous random variable is one that can take any value within a given range or interval. They are used to model quantities like: the height of a randomly selected person, the temperature at a specific location, etc.</p>
+<section id="probability-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="probability-distributions">Probability Distributions</h2>
+<p>In probability theory, a probability distribution describes the likelihood of various outcomes in a sample space. It provides a way to model and analyze uncertainty by assigning probabilities to different events. Probability distributions are fundamental tools in probability theory, offering insights into the nature of random variables and helping us make predictions about their behavior. Probability distributions help quantify the uncertainty associated with different outcomes of a random variable. They provide a systematic way to express the likelihood of each possible value.</p>
+<p>Probability distributions form the basis for statistical inference. They allow us to make predictions about the population based on a sample and make informed decisions under uncertainty. Probability distributions are used to model various random processes in diverse fields such as physics, finance, biology, and engineering. They provide a mathematical framework to describe the probabilistic nature of real-world phenomena.</p>
+<p><strong>Uniform Distribution</strong></p>
+<p>The uniform distribution is characterized by all outcomes being equally likely. Each value within a specified range has the same probability of occurring. The probability density function (PDF) for a continuous uniform distribution over the interval [a,b] is given by:</p>
+<pre><code>        f(x)= 1/b−a  for a ≤ x ≤ b</code></pre>
+<p>Consider the example of rolling a fair six-sided die. Each face of the die has an equal chance of landing face up. If we assume the die is unbiased, the outcome of each roll follows a uniform distribution over the discrete values {1,2,3,4,5,6}. Each number has a probability of 1/6 of occurring.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> uniform</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the range [a, b]</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> <span class="dv">6</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sample of 1000 values from a uniform distribution</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> uniform.rvs(loc<span class="op">=</span>a, scale<span class="op">=</span>b<span class="op">-</span>a, size<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the histogram of the sample</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>plt.hist(sample, bins<span class="op">=</span><span class="dv">20</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the probability density function (PDF)</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(a, b, <span class="dv">100</span>)</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>plt.plot(x, uniform.pdf(x, loc<span class="op">=</span>a, scale<span class="op">=</span>b<span class="op">-</span>a), <span class="st">'r-'</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Uniform PDF'</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Add labels and a legend</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Outcome'</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Probability Density'</span>)</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Uniform Distribution Example'</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the plot</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="about_files/figure-html/cell-2-output-1.png" width="597" height="449"></p>
+</div>
+</div>
+<p><strong>Binomial Distribution</strong></p>
+<p>The binomial distribution models the number of successes in a fixed number of independent and identically distributed Bernoulli trials, where each trial has only two possible outcomes (usually termed as “success” and “failure”). The probability mass function (PMF) of a binomial distribution is given by:</p>
+<pre><code>         P(X=k)=( n_p_k ) p^k (1-p)^(n-k)</code></pre>
+<p>​ where: n is the number of trials, k is the number of successes, p is the probability of success on a single trial, and (1−p) is the probability of failure on a single trial.</p>
+<p>Consider the example of flipping a biased coin. Let’s say you have a coin that has a 60% chance of landing heads (success) and a 40% chance of landing tails (failure). If you flip this coin 5 times, you can model the number of heads obtained using a binomial distribution.</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> binom</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>n_trials <span class="op">=</span> <span class="dv">5</span>  <span class="co"># Number of coin flips</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>p_success <span class="op">=</span> <span class="fl">0.6</span>  <span class="co"># Probability of getting heads</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate possible outcomes (0 to n_trials)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">0</span>, n_trials<span class="op">+</span><span class="dv">1</span>)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate binomial probabilities for each outcome</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>binomial_pmf <span class="op">=</span> binom.pmf(x, n_trials, p_success)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the probability mass function (PMF)</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>plt.stem(x, binomial_pmf, basefmt<span class="op">=</span><span class="st">'b-'</span>, linefmt<span class="op">=</span><span class="st">'b-'</span>, markerfmt<span class="op">=</span><span class="st">'bo'</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Binomial Distribution Example'</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of Heads'</span>)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Probability'</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="about_files/figure-html/cell-3-output-1.png" width="597" height="449"></p>
+</div>
+</div>
+<p><strong>Gaussian Distribution</strong></p>
+<p>The Gaussian distribution, also known as the normal distribution, is a continuous probability distribution that is symmetric around its mean. It is characterized by its bell-shaped curve. The probability density function (PDF) of a normal distribution is given by:</p>
+<p>f(x;μ,σ)= 1/σroot(2π) e -1/3(x-mu)/sigma^2</p>
+<p>where: μ is the mean, σ is the standard deviation</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> norm</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameters</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>mean_height <span class="op">=</span> <span class="dv">170</span>  <span class="co"># Mean height in centimeters</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>std_deviation <span class="op">=</span> <span class="dv">10</span>  <span class="co"># Standard deviation in centimeters</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sample of 1000 values from a normal distribution</span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> np.random.normal(mean_height, std_deviation, <span class="dv">1000</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the histogram of the sample</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>plt.hist(sample, bins<span class="op">=</span><span class="dv">30</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the probability density function (PDF)</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(mean_height <span class="op">-</span> <span class="dv">4</span><span class="op">*</span>std_deviation, mean_height <span class="op">+</span> <span class="dv">4</span><span class="op">*</span>std_deviation, <span class="dv">100</span>)</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>plt.plot(x, norm.pdf(x, mean_height, std_deviation), <span class="st">'r-'</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Normal PDF'</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Add labels and a legend</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Height (cm)'</span>)</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Probability Density'</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Gaussian Distribution Example'</span>)</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the plot</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="about_files/figure-html/cell-4-output-1.png" width="606" height="449"></p>
+</div>
+</div>
+<p><strong>Poisson Distribution</strong></p>
+<p>The Poisson distribution models the number of events that occur in a fixed interval of time or space. It is often used for rare events with a known average rate of occurrence. The probability mass function (PMF) of a Poisson distribution is given by:</p>
+<p>Insert formula</p>
+<p>Insert defining elements</p>
+<p>Consider a scenario where you are observing the number of customer arrivals at a store in a given hour, and you know that, on average, 5 customers arrive per hour. The Poisson distribution can be used to model the probability of observing a specific number of customer arrivals in that hour.</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> poisson</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameter</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>average_rate <span class="op">=</span> <span class="dv">5</span>  <span class="co"># Average number of events per interval</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate possible outcomes (0 to 20 events)</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">0</span>, <span class="dv">21</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate Poisson probabilities for each outcome</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>poisson_pmf <span class="op">=</span> poisson.pmf(x, average_rate)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the probability mass function (PMF)</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>plt.stem(x, poisson_pmf, basefmt<span class="op">=</span><span class="st">'b-'</span>, linefmt<span class="op">=</span><span class="st">'b-'</span>, markerfmt<span class="op">=</span><span class="st">'bo'</span>)</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Poisson Distribution Example'</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Number of Events'</span>)</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Probability'</span>)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="about_files/figure-html/cell-5-output-1.png" width="606" height="449"></p>
+</div>
+</div>
+<p><strong>Exponential Distribution</strong></p>
+<p>The exponential distribution models the time between events in a Poisson process, where events occur continuously and independently at a constant average rate. It is characterized by its memoryless property, meaning that the probability of an event occurring in the next time unit is independent of the past. The probability density function (PDF) of an exponential distribution is given by:</p>
+<p>Insert formula</p>
+<p>Define elements</p>
+<p>Consider a scenario where customers arrive at a service point, and the time between successive arrivals follows an exponential distribution. This can be applied to model the inter-arrival times in a queue, the time between calls at a call center, or the time between arrivals of buses at a bus stop.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> expon</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define parameter</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>rate_parameter <span class="op">=</span> <span class="fl">0.5</span>  <span class="co"># Average number of events per unit time</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a sample of 1000 values from an exponential distribution</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>sample <span class="op">=</span> expon.rvs(scale<span class="op">=</span><span class="dv">1</span><span class="op">/</span>rate_parameter, size<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the histogram of the sample</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>plt.hist(sample, bins<span class="op">=</span><span class="dv">30</span>, density<span class="op">=</span><span class="va">True</span>, alpha<span class="op">=</span><span class="fl">0.7</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the probability density function (PDF)</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">100</span>)</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>plt.plot(x, expon.pdf(x, scale<span class="op">=</span><span class="dv">1</span><span class="op">/</span>rate_parameter), <span class="st">'r-'</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">'Exponential PDF'</span>)</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Add labels and a legend</span></span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Time Between Events'</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Probability Density'</span>)</span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Exponential Distribution Example'</span>)</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>plt.legend()</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the plot</span></span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="about_files/figure-html/cell-6-output-1.png" width="589" height="449"></p>
+</div>
+</div>
+</section>
+<section id="expected-value-and-variance" class="level2">
+<h2 class="anchored" data-anchor-id="expected-value-and-variance">Expected Value and Variance</h2>
+<p>The expected value of a discrete random variable X is a measure of the central tendency and is denoted by E(X). It is calculated as the sum of each possible value of X multiplied by its probability.</p>
+<p>Insert Formula</p>
+<p>Add an example in die setting</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the sample space and probabilities for each outcome</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>outcomes <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>probabilities <span class="op">=</span> [<span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">6</span>]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the expected value</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>expected_value <span class="op">=</span> <span class="bu">sum</span>(x <span class="op">*</span> p <span class="cf">for</span> x, p <span class="kw">in</span> <span class="bu">zip</span>(outcomes, probabilities))</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Expected Value:"</span>, expected_value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Expected Value: 3.5</code></pre>
+</div>
+</div>
+<p>For a continuous random variable X, the expected value is the integral of x times the probability density function (PDF).</p>
+<p>Insert Formula</p>
+<p>Consider a continuous random variable X with a uniform distribution over the interval [2,8].</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.integrate <span class="im">import</span> quad</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the PDF for the uniform distribution</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> uniform_pdf(x):</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="dv">1</span><span class="op">/</span><span class="dv">6</span> <span class="cf">if</span> <span class="dv">2</span> <span class="op">&lt;=</span> x <span class="op">&lt;=</span> <span class="dv">8</span> <span class="cf">else</span> <span class="dv">0</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the expected value</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>expected_value_continuous, _ <span class="op">=</span> quad(<span class="kw">lambda</span> x: x <span class="op">*</span> uniform_pdf(x), <span class="dv">2</span>, <span class="dv">8</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Expected Value (Continuous):"</span>, expected_value_continuous)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Expected Value (Continuous): 5.0</code></pre>
+</div>
+</div>
+<p>Variance measures the spread or variability of a random variable. For a discrete random variable X, the variance Var(X) is calculated as the sum of the squared differences between each value and the mean, weighted by their probabilities.</p>
+<p>Insert Formula</p>
+<p>Add an example in a die setting</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the variance</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>variance <span class="op">=</span> <span class="bu">sum</span>((x <span class="op">-</span> expected_value)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> p <span class="cf">for</span> x, p <span class="kw">in</span> <span class="bu">zip</span>(outcomes, probabilities))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Variance:"</span>, variance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Variance: 2.9166666666666665</code></pre>
+</div>
+</div>
+<p>For a continuous random variable X, the variance is the integral of (x−E(X))^2 times the PDF.</p>
+<p>Insert Formula</p>
+<p>Consider a continuous random variable X with a uniform distribution over the interval [2,8].</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the variance</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>variance_continuous, _ <span class="op">=</span> quad(<span class="kw">lambda</span> x: (x <span class="op">-</span> expected_value_continuous)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> uniform_pdf(x), <span class="dv">2</span>, <span class="dv">8</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Variance (Continuous):"</span>, variance_continuous)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Variance (Continuous): 3.0</code></pre>
+</div>
+</div>
+</section>
+<section id="joint-probability-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="joint-probability-distributions">Joint Probability Distributions</h2>
+<p>A joint probability distribution describes the simultaneous behavior of two or more random variables. It provides the probabilities for every possible combination of values that the random variables can take.</p>
+<p>Consider two six-sided dice, X and Y, representing the outcomes of two independent rolls. The joint probability distribution is a table indicating the probability of each possible pair of outcomes (x,y).</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the sample space and calculate joint probabilities</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>sample_space_X <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>sample_space_Y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>joint_probabilities <span class="op">=</span> np.zeros((<span class="dv">6</span>, <span class="dv">6</span>))</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, x <span class="kw">in</span> <span class="bu">enumerate</span>(sample_space_X):</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> j, y <span class="kw">in</span> <span class="bu">enumerate</span>(sample_space_Y):</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>        joint_probabilities[i, j] <span class="op">=</span> <span class="dv">1</span><span class="op">/</span><span class="dv">36</span>  <span class="co"># Since each outcome is equally likely</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the joint probability distribution</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Joint Probability Distribution:"</span>)</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(joint_probabilities)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Joint Probability Distribution:
+[[0.02777778 0.02777778 0.02777778 0.02777778 0.02777778 0.02777778]
+ [0.02777778 0.02777778 0.02777778 0.02777778 0.02777778 0.02777778]
+ [0.02777778 0.02777778 0.02777778 0.02777778 0.02777778 0.02777778]
+ [0.02777778 0.02777778 0.02777778 0.02777778 0.02777778 0.02777778]
+ [0.02777778 0.02777778 0.02777778 0.02777778 0.02777778 0.02777778]
+ [0.02777778 0.02777778 0.02777778 0.02777778 0.02777778 0.02777778]]</code></pre>
+</div>
+</div>
+</section>
+<section id="marginal-probability-distributions" class="level2">
+<h2 class="anchored" data-anchor-id="marginal-probability-distributions">Marginal Probability Distributions</h2>
+<p>Marginal probability distributions focus on the probabilities of individual random variables without considering the others. In the context of joint distributions, these are obtained by summing or integrating over the values of the other variables.</p>
+<p>Consider two six-sided dice, X and Y, representing the outcomes of two independent rolls. The joint probability distribution is a table indicating the probability of each possible pair of outcomes (x,y). Let’s calculate the marginal distributions of X and Y.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate marginal probabilities</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>marginal_X <span class="op">=</span> np.<span class="bu">sum</span>(joint_probabilities, axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>marginal_Y <span class="op">=</span> np.<span class="bu">sum</span>(joint_probabilities, axis<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the marginal probability distributions</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Marginal Probability Distribution of X:"</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(marginal_X)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">Marginal Probability Distribution of Y:"</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(marginal_Y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Marginal Probability Distribution of X:
+[0.16666667 0.16666667 0.16666667 0.16666667 0.16666667 0.16666667]
+
+Marginal Probability Distribution of Y:
+[0.16666667 0.16666667 0.16666667 0.16666667 0.16666667 0.16666667]</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="conditional-probability" class="level1">
+<h1>Conditional Probability</h1>
+<p>Conditional probability plays a crucial role in machine learning by allowing us to model the likelihood of an event given certain conditions. In the context of machine learning, it helps us make predictions based on observed evidence. Consider events A and B, the conditional probability of A given B is denoted as P(A|B), representing the probability of A occurring given that B has occurred.</p>
+<p>In machine learning, conditional probability is fundamental for tasks such as classification, where we want to predict the probability of a certain class given some input features.</p>
+<section id="bayes-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="bayes-theorem">Bayes’ Theorem</h2>
+<p>Bayes’ Theorem is a powerful tool derived from conditional probability. It allows us to update the probability of a hypothesis based on new evidence. The formula is as follows:</p>
+<p>Insert formula P(A∣B) = P(B∣A)⋅P(A)/P(B) Where: P(A∣B) is the posterior probability (probability of A given B). P(B∣A) is the likelihood (probability of B given A). P(A) is the prior probability (probability of A). P(B) is the marginal likelihood (probability of B).</p>
+<p>Example:</p>
+<p>Let’s consider a simple example where we want to predict the probability of a student passing an exam (event A) given that they attended a study session (event B). We have the following probabilities:</p>
+<p>P(A)=0.7 (prior probability of passing) P(B∣A)=0.8 (likelihood of attending a study session given passing) P(B∣¬A)=0.4 (likelihood of attending a study session given not passing)</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define probabilities</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>P_A <span class="op">=</span> <span class="fl">0.7</span>  <span class="co"># Prior probability of passing</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>P_B_given_A <span class="op">=</span> <span class="fl">0.8</span>  <span class="co"># Likelihood of attending a study session given passing</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>P_B_given_not_A <span class="op">=</span> <span class="fl">0.4</span>  <span class="co"># Likelihood of attending a study session given not passing</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate marginal likelihood P(B)</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>P_B <span class="op">=</span> P_B_given_A <span class="op">*</span> P_A <span class="op">+</span> P_B_given_not_A <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P_A)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate posterior probability P(A|B) using Bayes' Theorem</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>P_A_given_B <span class="op">=</span> (P_B_given_A <span class="op">*</span> P_A) <span class="op">/</span> P_B</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The probability of passing given attending a study session is: </span><span class="sc">{</span>P_A_given_B<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The probability of passing given attending a study session is: 0.82</code></pre>
+</div>
+</div>
+<p>In this example, we use Bayes’ Theorem to update our prior belief (probability of passing) based on new evidence (attending a study session). The calculated posterior probability gives us an updated estimate of the likelihood of passing given the observed evidence.</p>
+<p>This demonstrates how conditional probability and Bayes’ Theorem are applied in machine learning for making predictions and updating beliefs based on new information.</p>
+</section>
+</section>
+<section id="probabilistic-models-naive-bayes-classifier" class="level1">
+<h1>Probabilistic Models: Naive Bayes Classifier</h1>
+<p>One of the classic examples of a probabilistic model in machine learning is the Naive Bayes classifier. This algorithm is based on Bayes’ Theorem and assumes that features are conditionally independent given the class. Despite its simplicity, Naive Bayes performs well in various classification tasks, especially in text classification.</p>
+<p>The Bayes’ theorem in the context of classification is as follows,</p>
+<p>P(A∣B) = P(B∣A)⋅P(A)/P(B)</p>
+<p>In the context of classification: P(A∣B) is the probability of class A given the observed features B. P(B∣A) is the likelihood of observing features B given class A. P(A) is the prior probability of class A. P(B) is the evidence probability, which is the same for all classes and can be ignored when comparing probabilities.</p>
+<p>The “naive” assumption in Naive Bayes is that the features are conditionally independent given the class. This means that the presence or absence of a particular feature is assumed to be unrelated to the presence or absence of any other feature given the class.</p>
+<p>P(features∣class)=P(feature_1∣class)⋅P(feature_2∣class)⋅…⋅P(feature_n∣class)</p>
+<p>The Naive Bayes classifier calculates the probability of each class given the observed features and assigns the class with the highest probability as the prediction.</p>
+<p>Predicted Class = argmax_c P(class=c∣features)</p>
+<p>Let’s consider a text classification example where we want to classify emails as spam or not spam based on the occurrence of certain words.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> MultinomialNB</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample data: emails and their labels</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>emails <span class="op">=</span> [</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'Get a brand new iPhone for free!'</span>, <span class="st">'spam'</span>),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'Meeting at 2 pm in the conference room'</span>, <span class="st">'not_spam'</span>),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add more examples</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate data into features (X) and labels (y)</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> <span class="bu">zip</span>(<span class="op">*</span>emails)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert text data to numerical format using CountVectorizer</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>vectorizer <span class="op">=</span> CountVectorizer()</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> vectorizer.fit_transform(X)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Create and train the Multinomial Naive Bayes classifier</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>classifier <span class="op">=</span> MultinomialNB()</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>classifier.fit(X, y)</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions for new data</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>new_email <span class="op">=</span> [<span class="st">'Congratulations! You have won a million dollars!'</span>]</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>new_email_vectorized <span class="op">=</span> vectorizer.transform(new_email)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>prediction <span class="op">=</span> classifier.predict(new_email_vectorized)</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The predicted class for the new email is: </span><span class="sc">{</span>prediction[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The predicted class for the new email is: not_spam</code></pre>
+</div>
+</div>
+<p>In this example, we use the MultinomialNB class from scikit-learn to implement a Naive Bayes classifier. We have considered Multinomial Naive Bayes as it is suitable for discrete data, often used in text classification. It also assumes features represent word counts or frequencies. The CountVectorizer is used to convert text data into a numerical format that the classifier can handle. The model is then trained on the training set and evaluated on the test set.</p>
+<p>This demonstrates how probability theory, particularly Bayes’ Theorem, is applied in a machine learning context to build a probabilistic model for classification. Naive Bayes classifiers are widely used in spam detection, sentiment analysis, and other text classification tasks.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
