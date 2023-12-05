@@ -115,10 +115,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="dropdown-header">
- <span class="menu-text">about.qmd</span></li>
   <li class="nav-item">
-    <a class="nav-link" href="./blog0.html" rel="" target="">
+    <a class="nav-link active" href="./blog1.html" rel="" target="" aria-current="page">
+ <span class="menu-text">Probability Theory and Random Variables</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./blog2.html" rel="" target="">
  <span class="menu-text">Clustering</span></a>
   </li>  
   <li class="nav-item">
@@ -161,6 +163,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#joint-probability-distributions" id="toc-joint-probability-distributions" class="nav-link" data-scroll-target="#joint-probability-distributions">Joint Probability Distributions</a></li>
   <li><a href="#marginal-probability-distributions" id="toc-marginal-probability-distributions" class="nav-link" data-scroll-target="#marginal-probability-distributions">Marginal Probability Distributions</a></li>
   </ul></li>
+  <li><a href="#conditional-probability" id="toc-conditional-probability" class="nav-link" data-scroll-target="#conditional-probability">Conditional Probability</a>
+  <ul class="collapse">
+  <li><a href="#bayes-theorem" id="toc-bayes-theorem" class="nav-link" data-scroll-target="#bayes-theorem">Bayes’ Theorem</a></li>
+  </ul></li>
+  <li><a href="#probabilistic-models-naive-bayes-classifier" id="toc-probabilistic-models-naive-bayes-classifier" class="nav-link" data-scroll-target="#probabilistic-models-naive-bayes-classifier">Probabilistic Models: Naive Bayes Classifier</a></li>
   </ul>
 </nav>
     </div>
@@ -337,7 +344,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the plot</span></span>
 <span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="blog1_files/figure-html/cell-4-output-1.png" width="606" height="449"></p>
+<p><img src="blog1_files/figure-html/cell-4-output-1.png" width="597" height="449"></p>
 </div>
 </div>
 <p><strong>Poisson Distribution</strong></p>
@@ -401,7 +408,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Show the plot</span></span>
 <span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="blog1_files/figure-html/cell-6-output-1.png" width="589" height="449"></p>
+<p><img src="blog1_files/figure-html/cell-6-output-1.png" width="602" height="449"></p>
 </div>
 </div>
 </section>
@@ -517,9 +524,87 @@ Marginal Probability Distribution of Y:
 [0.16666667 0.16666667 0.16666667 0.16666667 0.16666667 0.16666667]</code></pre>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="conditional-probability" class="level1">
+<h1>Conditional Probability</h1>
+<p>Conditional probability plays a crucial role in machine learning by allowing us to model the likelihood of an event given certain conditions. In the context of machine learning, it helps us make predictions based on observed evidence. Consider events A and B, the conditional probability of A given B is denoted as P(A|B), representing the probability of A occurring given that B has occurred.</p>
+<p>In machine learning, conditional probability is fundamental for tasks such as classification, where we want to predict the probability of a certain class given some input features.</p>
+<section id="bayes-theorem" class="level2">
+<h2 class="anchored" data-anchor-id="bayes-theorem">Bayes’ Theorem</h2>
+<p>Bayes’ Theorem is a powerful tool derived from conditional probability. It allows us to update the probability of a hypothesis based on new evidence. The formula is as follows:</p>
+<p>Insert formula P(A∣B) = P(B∣A)⋅P(A)/P(B) Where: P(A∣B) is the posterior probability (probability of A given B). P(B∣A) is the likelihood (probability of B given A). P(A) is the prior probability (probability of A). P(B) is the marginal likelihood (probability of B).</p>
+<p>Example:</p>
+<p>Let’s consider a simple example where we want to predict the probability of a student passing an exam (event A) given that they attended a study session (event B). We have the following probabilities:</p>
+<p>P(A)=0.7 (prior probability of passing) P(B∣A)=0.8 (likelihood of attending a study session given passing) P(B∣¬A)=0.4 (likelihood of attending a study session given not passing)</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define probabilities</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>P_A <span class="op">=</span> <span class="fl">0.7</span>  <span class="co"># Prior probability of passing</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>P_B_given_A <span class="op">=</span> <span class="fl">0.8</span>  <span class="co"># Likelihood of attending a study session given passing</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>P_B_given_not_A <span class="op">=</span> <span class="fl">0.4</span>  <span class="co"># Likelihood of attending a study session given not passing</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate marginal likelihood P(B)</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>P_B <span class="op">=</span> P_B_given_A <span class="op">*</span> P_A <span class="op">+</span> P_B_given_not_A <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> P_A)</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate posterior probability P(A|B) using Bayes' Theorem</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>P_A_given_B <span class="op">=</span> (P_B_given_A <span class="op">*</span> P_A) <span class="op">/</span> P_B</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The probability of passing given attending a study session is: </span><span class="sc">{</span>P_A_given_B<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The probability of passing given attending a study session is: 0.82</code></pre>
+</div>
+</div>
+<p>In this example, we use Bayes’ Theorem to update our prior belief (probability of passing) based on new evidence (attending a study session). The calculated posterior probability gives us an updated estimate of the likelihood of passing given the observed evidence.</p>
+<p>This demonstrates how conditional probability and Bayes’ Theorem are applied in machine learning for making predictions and updating beliefs based on new information.</p>
+</section>
+</section>
+<section id="probabilistic-models-naive-bayes-classifier" class="level1">
+<h1>Probabilistic Models: Naive Bayes Classifier</h1>
+<p>One of the classic examples of a probabilistic model in machine learning is the Naive Bayes classifier. This algorithm is based on Bayes’ Theorem and assumes that features are conditionally independent given the class. Despite its simplicity, Naive Bayes performs well in various classification tasks, especially in text classification.</p>
+<p>The Bayes’ theorem in the context of classification is as follows,</p>
+<p>P(A∣B) = P(B∣A)⋅P(A)/P(B)</p>
+<p>In the context of classification: P(A∣B) is the probability of class A given the observed features B. P(B∣A) is the likelihood of observing features B given class A. P(A) is the prior probability of class A. P(B) is the evidence probability, which is the same for all classes and can be ignored when comparing probabilities.</p>
+<p>The “naive” assumption in Naive Bayes is that the features are conditionally independent given the class. This means that the presence or absence of a particular feature is assumed to be unrelated to the presence or absence of any other feature given the class.</p>
+<p>P(features∣class)=P(feature_1∣class)⋅P(feature_2∣class)⋅…⋅P(feature_n∣class)</p>
+<p>The Naive Bayes classifier calculates the probability of each class given the observed features and assigns the class with the highest probability as the prediction.</p>
+<p>Predicted Class = argmax_c P(class=c∣features)</p>
+<p>Let’s consider a text classification example where we want to classify emails as spam or not spam based on the occurrence of certain words.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.naive_bayes <span class="im">import</span> MultinomialNB</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.feature_extraction.text <span class="im">import</span> CountVectorizer</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample data: emails and their labels</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>emails <span class="op">=</span> [</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'Get a brand new iPhone for free!'</span>, <span class="st">'spam'</span>),</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    (<span class="st">'Meeting at 2 pm in the conference room'</span>, <span class="st">'not_spam'</span>),</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add more examples</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Separate data into features (X) and labels (y)</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>X, y <span class="op">=</span> <span class="bu">zip</span>(<span class="op">*</span>emails)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert text data to numerical format using CountVectorizer</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>vectorizer <span class="op">=</span> CountVectorizer()</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> vectorizer.fit_transform(X)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Create and train the Multinomial Naive Bayes classifier</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>classifier <span class="op">=</span> MultinomialNB()</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>classifier.fit(X, y)</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Make predictions for new data</span></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>new_email <span class="op">=</span> [<span class="st">'Congratulations! You have won a million dollars!'</span>]</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>new_email_vectorized <span class="op">=</span> vectorizer.transform(new_email)</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a>prediction <span class="op">=</span> classifier.predict(new_email_vectorized)</span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The predicted class for the new email is: </span><span class="sc">{</span>prediction[<span class="dv">0</span>]<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The predicted class for the new email is: not_spam</code></pre>
+</div>
+</div>
+<p>In this example, we use the MultinomialNB class from scikit-learn to implement a Naive Bayes classifier. We have considered Multinomial Naive Bayes as it is suitable for discrete data, often used in text classification. It also assumes features represent word counts or frequencies. The CountVectorizer is used to convert text data into a numerical format that the classifier can handle. The model is then trained on the training set and evaluated on the test set.</p>
+<p>This demonstrates how probability theory, particularly Bayes’ Theorem, is applied in a machine learning context to build a probabilistic model for classification. Naive Bayes classifiers are widely used in spam detection, sentiment analysis, and other text classification tasks.</p>
+
+
 </section>
 
 </main> <!-- /main -->
