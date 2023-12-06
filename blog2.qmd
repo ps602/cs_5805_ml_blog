@@ -19,13 +19,17 @@ Partitioning algorithms divide the dataset into distinct non-overlapping subsets
 
 KMeans is a popular unsupervised machine learning algorithm used for clustering. The goal of KMeans is to partition a dataset into K clusters, where each data point belongs to the cluster with the nearest mean. It's an iterative algorithm that aims to minimize the sum of squared distances between data points and the centroid of their assigned cluster.
 
-Given a dataset with n data points {x1, x2,…,xn} in d-dimensional space and K clusters, the goal is to minimize Inertia, also known as the within-cluster sum of squares, is the metric KMeans aims to minimize. It quantifies the compactness of the clusters. A lower inertia indicates that the data points in each cluster are closer to their centroid.
+Given a dataset with n data points ${x_1, x_2,…,x_n}$ in d-dimensional space and $K$ clusters, the goal is to minimize Inertia, also known as the within-cluster sum of squares, is the metric KMeans aims to minimize. It quantifies the compactness of the clusters. A lower inertia indicates that the data points in each cluster are closer to their centroid.
 
-It is given by the following objective function: J=∑i=1n min ∣∣xi −μj∣∣2
+It is given by the following objective function: 
+
+$$
+\text{Minimize: } J = \sum_{i=1}^{k} \sum_{j=1}^{n_i} \lVert x_{ij} - \mu_j \rVert^2
+$$
 
 Where:
-J is the sum of squared distances (inertia) between data points and their assigned cluster centroids.
-∣∣xi −μj∣∣2 is the Inertial, the squared Euclidean distance between data point xi and cluster centroid μj.
+$J$ is the sum of squared distances (inertia) between data points and their assigned cluster centroids.
+$\lVert x_{ij} - \mu_j \rVert^2$ is the Inertia, the squared Euclidean distance between data point $x_i$ and cluster centroid $μ_j$.
 
 The KMeans algorithm can be described as follows,
 
@@ -379,7 +383,7 @@ Density-based algorithms, such as DBSCAN (Density-Based Spatial Clustering of Ap
 
 The main parameters for DBSCAN are as follows,
 
-Epsilon (eps): The maximum distance between two samples for them to be considered as in the same neighborhood. It determines the radius around a data point.
+Epsilon $\epsilon$: The maximum distance between two samples for them to be considered as in the same neighborhood. It determines the radius around a data point.
 
 Minimum Samples (min_samples): The number of samples (or total weight) in a neighborhood for a data point to be considered as a core point. A core point is a data point that has at least "min_samples" data points within its epsilon neighborhood.
 
@@ -466,10 +470,11 @@ Gaussian Mixture Models represent a probabilistic model for representing the pre
 
 It uses a mixture of several Gaussian distributions. The probability density function (PDF) for a GMM is given by:
 
-P(x)=∑k=1K πk N(x∣μk,Σk) where:
+$$
+f(x) = \sum_{k=1}^{K} \pi_k \cdot \frac{1}{\sqrt{2\pi\sigma_k^2}} \exp\left(-\frac{(x - \mu_k)^2}{2\sigma_k^2}\right)
+$$
 
-πk is the weight of the k-th Gaussian component, representing the proportion of data points assigned to that component. μk is the mean vector of the k-th Gaussian component, 
-Σk is the covariance matrix of the k-th Gaussian component. N is the Gaussian distribution function. The goal of GMM is to estimate the parameters πk, μk, and Σk that maximize the likelihood of the observed data.
+πk is the weight of the k-th Gaussian component, representing the proportion of data points assigned to that component. $\mu_k$ is the mean vector of the k-th Gaussian component, $\sigma_k$ is the covariance matrix of the k-th Gaussian component. $f$ is the Gaussian distribution function. The goal of GMM is to estimate the parameters $\mu_k$, and $\sigma_k$ that maximize the likelihood of the observed data.
 
 ```{python}
 from sklearn.mixture import GaussianMixture

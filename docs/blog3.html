@@ -97,6 +97,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -195,28 +197,34 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="simple-linear-regression" class="level3">
 <h3 class="anchored" data-anchor-id="simple-linear-regression">Simple Linear Regression</h3>
 <p>For a simple linear regression with one independent variable:</p>
-<pre><code>        y=β0+β1⋅x+ε</code></pre>
-<p>y: Dependent variable (the variable we want to predict) x: Independent variable (predictor variable) β0: Intercept (y-intercept), the value of y when x=0 β1: Slope (gradient), represents the change in y for a unit change in x ε: Error term, represents the unobserved factors affecting y</p>
+<p><span class="math display">\[
+    y = \beta_0 + \beta_1x + \epsilon
+\]</span></p>
+<p><span class="math inline">\(y\)</span>: Dependent variable (the variable we want to predict) <span class="math inline">\(x\)</span>: Independent variable (predictor variable) <span class="math inline">\(\beta_0\)</span>: Intercept (y-intercept), the value of y when x=0 <span class="math inline">\(\beta_1\)</span>: Slope (gradient), represents the change in y for a unit change in x <span class="math inline">\(\epsilon\)</span>: Error term, represents the unobserved factors affecting y</p>
 <p>The objective is to minimize the sum of squared differences between the observed (y) and predicted (y^) values:</p>
-<pre><code>        J(β0,β1 )= 1/2m∑i=1m (y^i−yi)^2 where:</code></pre>
-<p>m: Number of data points y^i: Predicted value for the i-th data point yi: Observed value for the i-th data point</p>
+<p><span class="math display">\[
+\text{Minimize: } J = \frac{1}{2m} \sum_{i=1}^{m} (y_i - \hat{y}_i)^2
+\]</span></p>
+<p><span class="math inline">\(m\)</span>: Number of data points <span class="math inline">\(\hat{y}_i\)</span>: Predicted value for the i-th data point <span class="math inline">\(y_i\)</span>: Observed value for the i-th data point</p>
 <p>Gradient Descent is commonly used to find the values of β0 and β1 that minimize the cost function J. The update rule is:</p>
-<pre><code>        βj :=βj-α ∂/∂βj J(β0,β1) where</code></pre>
-<p>α is the learning rate.</p>
+<p><span class="math display">\[
+\beta_j := \beta_j - \alpha \frac{1}{n} \sum_{i=1}^{n} (h_\theta(x_i) - y_i) \cdot x_{ij}
+\]</span></p>
+<p><span class="math inline">\(\alpha\)</span> is the learning rate.</p>
 <p>We choose the “Advertising” dataset from Kaggle where we want to analyze the relationship between “TV Advertising” and “Sales”.</p>
 <div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the California Housing dataset</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>advertising <span class="op">=</span> pd.read_csv(<span class="st">'advertising.csv'</span>)</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>advertising.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> mean_squared_error</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the dataset</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'advertising.csv'</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="17">
 <div>
 
 
@@ -274,8 +282,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>We perform exploratory data analysis (EDA) on the data to understand the characteristics of the data, unveil patterns, detect anomalies, and gather insights that can guide subsequent analyses and modeling. We perform data wrangling, where the important steps include data cleaning by removal null-values and outliers.</p>
 <div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>advertising.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="18">
 <div>
 
 
@@ -354,22 +362,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>Outliers in a dataset are often identified as points that fall beyond a specified distance from the edges of the box and whiskers. This distance is typically determined by a multiplier of the IQR, and data points beyond this range are considered potential outliers.</p>
 <div class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking for outliers</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>sns.boxplot(advertising[<span class="st">'Sales'</span>])</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking for outliers</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>sns.boxplot(data[<span class="st">'Sales'</span>])</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="blog3_files/figure-html/cell-4-output-1.png" width="585" height="393"></p>
 </div>
 </div>
 <p>Then we look at the feature interdependence using pairplots and the heatmap of the correlation between the different variables.</p>
 <div class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's see how Sales are related with other variables using scatter plot.</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>sns.pairplot(advertising, x_vars<span class="op">=</span>[<span class="st">'TV'</span>, <span class="st">'Newspaper'</span>, <span class="st">'Radio'</span>], y_vars<span class="op">=</span><span class="st">'Sales'</span>, height<span class="op">=</span><span class="dv">4</span>, aspect<span class="op">=</span><span class="dv">1</span>, kind<span class="op">=</span><span class="st">'scatter'</span>)</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Let's see the correlation between different variables.</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>sns.heatmap(advertising.corr(), cmap<span class="op">=</span><span class="st">"YlGnBu"</span>, annot <span class="op">=</span> <span class="va">True</span>)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sales relation with other variables using scatter plot.</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>sns.pairplot(data, x_vars<span class="op">=</span>[<span class="st">'TV'</span>, <span class="st">'Newspaper'</span>, <span class="st">'Radio'</span>], y_vars<span class="op">=</span><span class="st">'Sales'</span>, height<span class="op">=</span><span class="dv">4</span>, aspect<span class="op">=</span><span class="dv">1</span>, kind<span class="op">=</span><span class="st">'scatter'</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># correlation between different variables.</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>sns.heatmap(data.corr(), cmap<span class="op">=</span><span class="st">"YlGnBu"</span>, annot <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="blog3_files/figure-html/cell-5-output-1.png" width="1134" height="380"></p>
 </div>
@@ -380,30 +388,30 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>As is visible from the pairplot and the heatmap, the variable TV seems to be most correlated with Sales. So let’s go ahead and perform simple linear regression using TV as our feature variable.</p>
 <p>We need to split our variable into training and testing sets. We’ll accomplish this by utilizing the train_test_split function from the sklearn.model_selection library. It’s customary to allocate 70% of the data to our training dataset, leaving the remaining 30% for the test dataset. By default, we fit a line on the dataset that passes through the origin using the statsmodels library. However, to introduce an intercept, we must manually utilize the add_constant attribute of statsmodels. Once we’ve added the constant to our X_train dataset, we can proceed to fit a regression line using the OLS (Ordinary Least Squares) attribute of statsmodels, as demonstrated below.</p>
 <div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, Lasso, Ridge</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> advertising[<span class="st">'TV'</span>]</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> advertising[<span class="st">'Sales'</span>]</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, train_size <span class="op">=</span> <span class="fl">0.7</span>, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">100</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Add a constant to get an intercept</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>X_train_sm <span class="op">=</span> sm.add_constant(X_train)</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the resgression line using 'OLS'</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> sm.OLS(y_train, X_train_sm).fit()</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(lr.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, Lasso, Ridge</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data[<span class="st">'TV'</span>]</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> data[<span class="st">'Sales'</span>]</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, train_size <span class="op">=</span> <span class="fl">0.7</span>, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">100</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding a constant to get an intercept</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>X_train_sm <span class="op">=</span> sm.add_constant(X_train)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Fitting the resgression</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>lr <span class="op">=</span> sm.OLS(y_train, X_train_sm).fit()</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(lr.summary())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                            OLS Regression Results                            
 ==============================================================================
 Dep. Variable:                  Sales   R-squared:                       0.816
 Model:                            OLS   Adj. R-squared:                  0.814
 Method:                 Least Squares   F-statistic:                     611.2
-Date:                Mon, 04 Dec 2023   Prob (F-statistic):           1.52e-52
-Time:                        12:39:41   Log-Likelihood:                -321.12
+Date:                Wed, 06 Dec 2023   Prob (F-statistic):           1.52e-52
+Time:                        07:17:21   Log-Likelihood:                -321.12
 No. Observations:                 140   AIC:                             646.2
 Df Residuals:                     138   BIC:                             652.1
 Df Model:                           1                                         
@@ -431,24 +439,24 @@ Notes:
 </ol>
 <p>We can see from the above metrics that the fit is significant. So we visualize how well our model has fit the data by plotting the Line given by the fitted slope and intercept and see how it fits our data’s scatter plot.</p>
 <div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_train, y_train)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>plt.plot(X_train, <span class="fl">6.948</span> <span class="op">+</span> <span class="fl">0.054</span><span class="op">*</span>X_train, <span class="st">'r'</span>,label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'TV Advertising'</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Sales'</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_train, y_train)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.plot(X_train, <span class="fl">6.948</span> <span class="op">+</span> <span class="fl">0.054</span><span class="op">*</span>X_train, <span class="st">'r'</span>,label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'TV Advertising'</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Sales'</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="blog3_files/figure-html/cell-7-output-1.png" width="585" height="429"></p>
 </div>
 </div>
 <p>The fit of the Linear Regression model can also be tested by seeing if the residual errors are normally distributed with zero mean and unit variance. We can see below that the residual distribution is normal as expected.</p>
 <div class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>y_train_pred <span class="op">=</span> lr.predict(X_train_sm)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> (y_train <span class="op">-</span> y_train_pred)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>sns.displot(res, bins <span class="op">=</span> <span class="dv">15</span>)                <span class="co"># Plot heading </span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Residual'</span>)         <span class="co"># X-label</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>y_train_pred <span class="op">=</span> lr.predict(X_train_sm)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>res <span class="op">=</span> (y_train <span class="op">-</span> y_train_pred)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>fig <span class="op">=</span> plt.figure()</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>sns.displot(res, bins <span class="op">=</span> <span class="dv">15</span>, kde<span class="op">=</span><span class="va">True</span>)                <span class="co"># Plot heading </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Residual'</span>)         <span class="co"># X-label</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <pre><code>&lt;Figure size 672x480 with 0 Axes&gt;</code></pre>
 </div>
@@ -458,17 +466,17 @@ Notes:
 </div>
 <p>These models need to be also evaluated on a test set that they were not exposed to while training, to understand if there is any overfitting or underfitting that has occurred due to bias and variance.</p>
 <div class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>X_test_sm <span class="op">=</span> sm.add_constant(X_test)</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict the y values corresponding to X_test_sm</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> lr.predict(X_test_sm)</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test)</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>plt.plot(X_test, <span class="fl">6.948</span> <span class="op">+</span> <span class="fl">0.054</span> <span class="op">*</span> X_test, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'TV Advertising'</span>)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Sales'</span>)</span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>X_test_sm <span class="op">=</span> sm.add_constant(X_test)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Predict the y values corresponding to X_test_sm</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>y_pred <span class="op">=</span> lr.predict(X_test_sm)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>plt.plot(X_test, <span class="fl">6.948</span> <span class="op">+</span> <span class="fl">0.054</span> <span class="op">*</span> X_test, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'TV Advertising'</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Sales'</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="blog3_files/figure-html/cell-9-output-1.png" width="597" height="429"></p>
 </div>
@@ -479,22 +487,22 @@ Notes:
 <h3 class="anchored" data-anchor-id="regularized-linear-regression-models">Regularized Linear Regression Models</h3>
 <p>Lasso Regression, or L1 regularization, is a linear regression technique that includes a penalty term in the cost function equivalent to the absolute values of the coefficients. This penalty encourages sparsity in the model, meaning it tends to force some of the coefficient estimates to be exactly zero. The regularization term is controlled by a hyperparameter, usually denoted as α. A higher α leads to a stronger regularization effect. Lasso regression is particularly useful when dealing with datasets with a large number of features, as it can automatically perform feature selection by setting some coefficients to zero, effectively ignoring less relevant predictors.</p>
 <div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, Lasso, Ridge</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> advertising[<span class="st">'TV'</span>]</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> advertising[<span class="st">'Sales'</span>]</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, train_size <span class="op">=</span> <span class="fl">0.7</span>, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">100</span>)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordinary Least Squares (OLS)</span></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>ols_model <span class="op">=</span> sm.OLS(y_train, sm.add_constant(X_train)).fit()</span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>ols_pred <span class="op">=</span> ols_model.predict(sm.add_constant(X_test))</span>
-<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Lasso Regression with statsmodels</span></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>lasso_model <span class="op">=</span> sm.OLS(y_train, sm.add_constant(X_train)).fit_regularized(alpha<span class="op">=</span><span class="fl">0.01</span>, L1_wt<span class="op">=</span><span class="dv">1</span>)  <span class="co"># L1_wt=1 for Lasso</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>lasso_pred <span class="op">=</span> lasso_model.predict(sm.add_constant(X_test))</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(lasso_model.params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression, Lasso, Ridge</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data[<span class="st">'TV'</span>]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> data[<span class="st">'Sales'</span>]</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, train_size <span class="op">=</span> <span class="fl">0.7</span>, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">100</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordinary Least Squares (OLS)</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>ols_model <span class="op">=</span> sm.OLS(y_train, sm.add_constant(X_train)).fit()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>ols_pred <span class="op">=</span> ols_model.predict(sm.add_constant(X_test))</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Lasso Regression with statsmodels</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>lasso_model <span class="op">=</span> sm.OLS(y_train, sm.add_constant(X_train)).fit_regularized(alpha<span class="op">=</span><span class="fl">0.01</span>, L1_wt<span class="op">=</span><span class="dv">1</span>)  <span class="co"># L1_wt=1 for Lasso</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>lasso_pred <span class="op">=</span> lasso_model.predict(sm.add_constant(X_test))</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(lasso_model.params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>const    6.913375
 TV       0.054717
@@ -503,61 +511,61 @@ dtype: float64</code></pre>
 </div>
 <p>Ridge Regression, or L2 regularization, is another variant of linear regression that includes a penalty term proportional to the squared values of the coefficients in the cost function. Similar to Lasso, Ridge introduces regularization controlled by a hyperparameter α. Ridge tends to shrink the coefficients towards zero but rarely sets them exactly to zero. It is effective in mitigating the issue of multicollinearity, where predictor variables are highly correlated. Ridge can stabilize the model and prevent it from being too sensitive to variations in the input data.</p>
 <div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Lasso, Ridge</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> advertising[<span class="st">'TV'</span>]</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> advertising[<span class="st">'Sales'</span>]</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, train_size <span class="op">=</span> <span class="fl">0.7</span>, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">100</span>)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Ridge Regression with statsmodels</span></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>ridge_model <span class="op">=</span> sm.OLS(y_train, sm.add_constant(X_train)).fit_regularized(alpha<span class="op">=</span><span class="fl">0.01</span>, L1_wt<span class="op">=</span><span class="dv">0</span>)  <span class="co"># L1_wt=0 for Ridge</span></span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>ridge_pred <span class="op">=</span> ridge_model.predict(sm.add_constant(X_test))</span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ridge_model.params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.model_selection <span class="im">import</span> train_test_split</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> Lasso, Ridge</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> data[<span class="st">'TV'</span>]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> data[<span class="st">'Sales'</span>]</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, train_size <span class="op">=</span> <span class="fl">0.7</span>, test_size <span class="op">=</span> <span class="fl">0.3</span>, random_state <span class="op">=</span> <span class="dv">100</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Ridge Regression with statsmodels</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>ridge_model <span class="op">=</span> sm.OLS(y_train, sm.add_constant(X_train)).fit_regularized(alpha<span class="op">=</span><span class="fl">0.01</span>, L1_wt<span class="op">=</span><span class="dv">0</span>)  <span class="co"># L1_wt=0 for Ridge</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>ridge_pred <span class="op">=</span> ridge_model.predict(sm.add_constant(X_test))</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(ridge_model.params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[6.71059051 0.05570333]</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare performance using Mean Squared Error</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mse_ols <span class="op">=</span> np.mean((y_test <span class="op">-</span> ols_pred)<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>mse_lasso <span class="op">=</span> np.mean((y_test <span class="op">-</span> lasso_pred)<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>mse_ridge <span class="op">=</span> np.mean((y_test <span class="op">-</span> ridge_pred)<span class="op">**</span><span class="dv">2</span>)</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Mean Squared Error (OLS): </span><span class="sc">{</span>mse_ols<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Mean Squared Error (Lasso): </span><span class="sc">{</span>mse_lasso<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Mean Squared Error (Ridge): </span><span class="sc">{</span>mse_ridge<span class="sc">}</span><span class="ss">'</span>)</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizing actual vs predicted values</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for OLS</span></span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test)</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>plt.plot(X_test, <span class="fl">6.948</span><span class="op">+</span> X_test<span class="op">*</span><span class="fl">0.054</span>, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'OLS: Actual vs Predicted'</span>)</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Actual Values'</span>)</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Predicted Values'</span>)</span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for Lasso</span></span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>)</span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test)</span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>plt.plot(X_test, <span class="fl">6.913</span> <span class="op">+</span> X_test <span class="op">*</span> <span class="fl">0.054</span>, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Lasso: Actual vs Predicted'</span>)</span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Actual Values'</span>)</span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Predicted Values'</span>)</span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for Ridge</span></span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test)</span>
-<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>plt.plot(X_test, <span class="fl">6.710</span> <span class="op">+</span> <span class="fl">0.055</span> <span class="op">*</span> X_test, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
-<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Ridge: Actual vs Predicted'</span>)</span>
-<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Actual Values'</span>)</span>
-<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Predicted Values'</span>)</span>
-<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Compare performance using Mean Squared Error</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>mse_ols <span class="op">=</span> np.mean((y_test <span class="op">-</span> ols_pred)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>mse_lasso <span class="op">=</span> np.mean((y_test <span class="op">-</span> lasso_pred)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>mse_ridge <span class="op">=</span> np.mean((y_test <span class="op">-</span> ridge_pred)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Mean Squared Error (OLS): </span><span class="sc">{</span>mse_ols<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Mean Squared Error (Lasso): </span><span class="sc">{</span>mse_lasso<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'Mean Squared Error (Ridge): </span><span class="sc">{</span>mse_ridge<span class="sc">}</span><span class="ss">'</span>)</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizing actual vs predicted values</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for OLS</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>)</span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test)</span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>plt.plot(X_test, <span class="fl">6.948</span><span class="op">+</span> X_test<span class="op">*</span><span class="fl">0.054</span>, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'OLS: Actual vs Predicted'</span>)</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Actual Values'</span>)</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Predicted Values'</span>)</span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for Lasso</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">2</span>)</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test)</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a>plt.plot(X_test, <span class="fl">6.913</span> <span class="op">+</span> X_test <span class="op">*</span> <span class="fl">0.054</span>, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Lasso: Actual vs Predicted'</span>)</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Actual Values'</span>)</span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Predicted Values'</span>)</span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot for Ridge</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>plt.scatter(X_test, y_test)</span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>plt.plot(X_test, <span class="fl">6.710</span> <span class="op">+</span> <span class="fl">0.055</span> <span class="op">*</span> X_test, <span class="st">'r'</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Ridge: Actual vs Predicted'</span>)</span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Actual Values'</span>)</span>
+<span id="cb15-35"><a href="#cb15-35" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Predicted Values'</span>)</span>
+<span id="cb15-36"><a href="#cb15-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-37"><a href="#cb15-37" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb15-38"><a href="#cb15-38" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mean Squared Error (OLS): 4.077556371826953
 Mean Squared Error (Lasso): 4.08097078389324
@@ -576,86 +584,91 @@ Mean Squared Error (Ridge): 4.109361428273981</code></pre>
 <section id="polynomial-regression" class="level3">
 <h3 class="anchored" data-anchor-id="polynomial-regression">Polynomial Regression</h3>
 <p>Polynomial regression is an extension of linear regression, allowing for the modeling of relationships that are not strictly linear. While linear regression assumes a linear relationship between the independent and dependent variables, polynomial regression accommodates curves and non-linear patterns. In polynomial regression, the relationship is represented by a polynomial equation, allowing for more flexibility in capturing complex patterns within the data.</p>
-<p>The polynomial regression equation of degree n is given by: Y=b0+b1X+b2X<sup>2+…+bnX</sup>n+ε Here, Y is the dependent variable, X is the independent variable, b0 is the intercept, b1,b2,…,bn are the coefficients, X^n represents the terms with increasing powers of and ε is the error term.</p>
+<p>The polynomial regression equation of degree n is given by: <span class="math display">\[
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + \ldots + \beta_n x^n + \epsilon
+\]</span> Here, <span class="math inline">\(y\)</span> is the dependent variable, <span class="math inline">\(x\)</span> is the independent variable, <span class="math inline">\(\beta_0\)</span> is the intercept, <span class="math inline">\(\beta_1,\beta_2,…,\beta_n\)</span> are the coefficients, <span class="math inline">\(x^n\)</span> represents the terms with increasing powers of and <span class="math inline">\(\epsilon\)</span> is the error term.</p>
 <p>The coefficients are estimated from the data using methods like the method of least squares. We create a synthetic polynomial dataset to see how well the regressor is able to fit the polynomial function we have defined. We can see that the scatter plot below shows the data to be quadratic in nature as defined by our function y.</p>
 <div class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">100</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> np.random.rand(m, <span class="dv">1</span>) <span class="op">-</span> <span class="dv">3</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> X <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> X <span class="op">+</span> <span class="dv">2</span> <span class="op">+</span> np.random.randn(m, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">42</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> <span class="dv">6</span> <span class="op">*</span> np.random.rand(m, <span class="dv">1</span>) <span class="op">-</span> <span class="dv">3</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="fl">0.5</span> <span class="op">*</span> X <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> X <span class="op">+</span> <span class="dv">2</span> <span class="op">+</span> np.random.randn(m, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>plt.plot(X, y, <span class="st">"b."</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"$x_1$"</span>)</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$y$"</span>, rotation<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.axis([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">10</span>])</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>plt.plot(X, y, <span class="st">"b."</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"$x_1$"</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$y$"</span>, rotation<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>plt.axis([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">10</span>])</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="blog3_files/figure-html/cell-14-output-1.png" width="506" height="361"></p>
 </div>
 </div>
 <p>This example generates a quadratic dataset and fits a second-degree polynomial using scikit-learn. We can adjust the degree parameter in PolynomialFeatures to experiment with different polynomial degrees. We need to expand the features by adding columns for X2,X3,…,Xn up to the desired degree n.&nbsp;We use a linear regression algorithm to fit the polynomial equation to the expanded polynomial features. This involves estimating the coefficients b1,b2,…,bn that minimize the sum of squared differences between the observed and predicted values.</p>
 <div class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>poly_features <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span><span class="dv">2</span>, include_bias<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>X_poly <span class="op">=</span> poly_features.fit_transform(X)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>lin_reg <span class="op">=</span> LinearRegression()</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>lin_reg.fit(X_poly, y)</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>lin_reg.intercept_, lin_reg.coef_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> PolynomialFeatures</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>poly_features <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span><span class="dv">2</span>, include_bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>X_poly <span class="op">=</span> poly_features.fit_transform(X)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>lin_reg <span class="op">=</span> LinearRegression()</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>lin_reg.fit(X_poly, y)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>lin_reg.intercept_, lin_reg.coef_</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>(array([1.78134581]), array([[0.93366893, 0.56456263]]))</code></pre>
 </div>
 </div>
 <p>Once the model is trained, we use it to make predictions on new or unseen data. We can assess the performance of the model using appropriate metrics such as Mean Squared Error (MSE) or R-squared. We can visualize the fitted polynomial curve along with the data points to understand how well the model captures the underlying patterns.</p>
 <div class="cell" data-execution_count="15">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">100</span>).reshape(<span class="dv">100</span>, <span class="dv">1</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>X_new_poly <span class="op">=</span> poly_features.transform(X_new)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>y_new <span class="op">=</span> lin_reg.predict(X_new_poly)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>plt.plot(X, y, <span class="st">"b."</span>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>plt.plot(X_new, y_new, <span class="st">"r-"</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"$x_1$"</span>)</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$y$"</span>, rotation<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>plt.axis([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">10</span>])</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> r2_score</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>X_new <span class="op">=</span> np.linspace(<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">100</span>).reshape(<span class="dv">100</span>, <span class="dv">1</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>X_new_poly <span class="op">=</span> poly_features.transform(X_new)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>y_new <span class="op">=</span> lin_reg.predict(X_new_poly)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>plt.plot(X, y, <span class="st">"b."</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>plt.plot(X_new, y_new, <span class="st">"r-"</span>, linewidth<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="st">"Predictions"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"$x_1$"</span>)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$y$"</span>, rotation<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>plt.axis([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">10</span>])</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="blog3_files/figure-html/cell-16-output-1.png" width="506" height="361"></p>
 </div>
 </div>
 <p>The choice of the degree n is crucial. A too high degree may lead to overfitting, capturing noise in the data rather than the actual trend. Here we test for three different degrees [1,2,100] and see how it changes the fit and how well its able to capture the noisy points and outliers.</p>
 <div class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> style, width, degree <span class="kw">in</span> ((<span class="st">"r-+"</span>, <span class="dv">2</span>, <span class="dv">1</span>), (<span class="st">"b--"</span>, <span class="dv">2</span>, <span class="dv">2</span>), (<span class="st">"g-"</span>, <span class="dv">1</span>, <span class="dv">100</span>)):</span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>    polybig_features <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span>degree, include_bias<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>    std_scaler <span class="op">=</span> StandardScaler()</span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>    lin_reg <span class="op">=</span> LinearRegression()</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>    polynomial_regression <span class="op">=</span> make_pipeline(polybig_features, std_scaler, lin_reg)</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    polynomial_regression.fit(X, y)</span>
-<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>    y_newbig <span class="op">=</span> polynomial_regression.predict(X_new)</span>
-<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>    label <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>degree<span class="sc">}</span><span class="ss"> degree</span><span class="sc">{</span><span class="st">'s'</span> <span class="cf">if</span> degree <span class="op">&gt;</span> <span class="dv">1</span> <span class="cf">else</span> <span class="st">''</span><span class="sc">}</span><span class="ss">"</span></span>
-<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>    plt.plot(X_new, y_newbig, style, label<span class="op">=</span>label, linewidth<span class="op">=</span>width)</span>
-<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-16"><a href="#cb25-16" aria-hidden="true" tabindex="-1"></a>plt.plot(X, y, <span class="st">"b."</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
-<span id="cb25-17"><a href="#cb25-17" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
-<span id="cb25-18"><a href="#cb25-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"$x_1$"</span>)</span>
-<span id="cb25-19"><a href="#cb25-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$y$"</span>, rotation<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb25-20"><a href="#cb25-20" aria-hidden="true" tabindex="-1"></a>plt.axis([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">10</span>])</span>
-<span id="cb25-21"><a href="#cb25-21" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
-<span id="cb25-22"><a href="#cb25-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">4</span>))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> style, width, degree <span class="kw">in</span> ((<span class="st">"r-+"</span>, <span class="dv">2</span>, <span class="dv">1</span>), (<span class="st">"b--"</span>, <span class="dv">2</span>, <span class="dv">2</span>), (<span class="st">"g-"</span>, <span class="dv">1</span>, <span class="dv">100</span>)):</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    polybig_features <span class="op">=</span> PolynomialFeatures(degree<span class="op">=</span>degree, include_bias<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    std_scaler <span class="op">=</span> StandardScaler()</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    lin_reg <span class="op">=</span> LinearRegression()</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    polynomial_regression <span class="op">=</span> make_pipeline(polybig_features, std_scaler, lin_reg)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    polynomial_regression.fit(X, y)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    y_newbig <span class="op">=</span> polynomial_regression.predict(X_new)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    label <span class="op">=</span> <span class="ss">f"</span><span class="sc">{</span>degree<span class="sc">}</span><span class="ss"> degree</span><span class="sc">{</span><span class="st">'s'</span> <span class="cf">if</span> degree <span class="op">&gt;</span> <span class="dv">1</span> <span class="cf">else</span> <span class="st">''</span><span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    plt.plot(X_new, y_newbig, style, label<span class="op">=</span>label, linewidth<span class="op">=</span>width)</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>plt.plot(X, y, <span class="st">"b."</span>, linewidth<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper left"</span>)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"$x_1$"</span>)</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"$y$"</span>, rotation<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>plt.axis([<span class="op">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">10</span>])</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>plt.grid()</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="blog3_files/figure-html/cell-17-output-1.png" width="506" height="361"></p>
 </div>
 </div>
+<p>Linear regression is a fundamental tool for modeling relationships between variables through a linear equation. Lasso and Ridge regression, extensions of linear regression, introduce regularization to address issues like multicollinearity and overfitting. Lasso promotes sparsity, while Ridge penalizes large coefficients. Non-linear regression accommodates complex relationships. Linear regression is versatile, Lasso/Ridge are valuable for feature selection and regularization, and non-linear regression suits intricate data patterns. Applications include predicting house prices (linear), genomics (Lasso/Ridge), and modeling complex processes (non-linear). The choice depends on data characteristics and analysis goals.</p>
 
 
 </section>

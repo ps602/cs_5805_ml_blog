@@ -189,12 +189,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create the normal data</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>X_normal, y_normal <span class="op">=</span> make_blobs(n_samples<span class="op">=</span><span class="dv">500</span>, centers<span class="op">=</span><span class="dv">3</span>, n_features<span class="op">=</span><span class="dv">2</span>, cluster_std<span class="op">=</span><span class="dv">1</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df_normal <span class="op">=</span> pd.DataFrame({<span class="st">'feature1'</span>: X_normal[:, <span class="dv">0</span>], <span class="st">'feature2'</span>: X_normal[:, <span class="dv">1</span>], <span class="st">'anomaly_indicator'</span>: <span class="dv">0</span>})<span class="co"># Create the anomaly data</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create synethetic data</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>X_syn, y_syn <span class="op">=</span> make_blobs(n_samples<span class="op">=</span><span class="dv">500</span>, centers<span class="op">=</span><span class="dv">4</span>, n_features<span class="op">=</span><span class="dv">2</span>, cluster_std<span class="op">=</span><span class="dv">1</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>df_syn <span class="op">=</span> pd.DataFrame({<span class="st">'feature1'</span>: X_syn[:, <span class="dv">0</span>], <span class="st">'feature2'</span>: X_syn[:, <span class="dv">1</span>], <span class="st">'anomaly_indicator'</span>: <span class="dv">0</span>})<span class="co"># Create the anomaly data</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>X_anomaly, y_anomaly <span class="op">=</span> make_blobs(n_samples<span class="op">=</span><span class="dv">20</span>, centers<span class="op">=</span><span class="dv">2</span>, n_features<span class="op">=</span><span class="dv">2</span>, cluster_std <span class="op">=</span><span class="dv">10</span>, random_state<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>df_anomaly <span class="op">=</span> pd.DataFrame({<span class="st">'feature1'</span>: X_anomaly[:, <span class="dv">0</span>], <span class="st">'feature2'</span>: X_anomaly[:, <span class="dv">1</span>], <span class="st">'anomaly_indicator'</span>: <span class="dv">1</span>})<span class="co"># Combine the normal and the anomaly data</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df_normal, df_anomaly])<span class="co"># Change figure size</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([df_syn, df_anomaly])<span class="co"># Change figure size</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">8</span>))<span class="co"># Visualization</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>df[<span class="st">'feature1'</span>], y<span class="op">=</span>df[<span class="st">'feature2'</span>], hue<span class="op">=</span>df[<span class="st">'anomaly_indicator'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="1">
@@ -208,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Model dataset</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df[df.columns.difference([<span class="st">'anomaly_indicator'</span>])]<span class="co"># GMM model</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gmm <span class="op">=</span> GaussianMixture(n_components<span class="op">=</span><span class="dv">3</span>, n_init<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>)<span class="co"># Fit and predict on the data</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>gmm <span class="op">=</span> GaussianMixture(n_components<span class="op">=</span><span class="dv">4</span>, n_init<span class="op">=</span><span class="dv">5</span>, random_state<span class="op">=</span><span class="dv">42</span>)<span class="co"># Fit and predict on the data</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>y_gmm <span class="op">=</span> gmm.fit_predict(X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We use the Gaussian Mixture Model (GMM) for anomaly detection. n_components=3 indicates that we expect the data to be generated from three Gaussian distributions (normal instances and anomalies). The GMM provides negative log likelihood scores for each instance. Higher scores indicate that an instance is less likely to be part of the learned distribution. The negative log likelihood serves as an anomaly score. Therefore, instances with higher negative log likelihoods are considered potential anomalies.</p>
@@ -216,11 +216,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the score for each sample</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>score <span class="op">=</span> gmm.score_samples(X)<span class="co"># Save score as a column</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'score'</span>] <span class="op">=</span> score<span class="co"># Get the score threshold for anomaly</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>pct_threshold <span class="op">=</span> np.percentile(score, <span class="dv">4</span>)<span class="co"># Print the score threshold</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'The threshold of the score is </span><span class="sc">{</span>pct_threshold<span class="sc">:.2f}</span><span class="ss">'</span>)<span class="co"># Label the anomalies</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'anomaly_gmm_pct'</span>] <span class="op">=</span> df[<span class="st">'score'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> x <span class="op">&lt;</span> pct_threshold <span class="cf">else</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>threshold <span class="op">=</span> np.percentile(score, <span class="dv">4</span>)<span class="co"># Print the score threshold</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f'The threshold score is </span><span class="sc">{</span>threshold<span class="sc">:.2f}</span><span class="ss">'</span>)<span class="co"># Label the anomalies</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'anomaly_gmm'</span>] <span class="op">=</span> df[<span class="st">'score'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> x <span class="op">&lt;</span> threshold <span class="cf">else</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>The threshold of the score is -6.56</code></pre>
+<pre><code>The threshold score is -7.12</code></pre>
 </div>
 </div>
 <p>A threshold can be set on the negative log likelihood scores to classify instances as anomalies. Instances with negative log likelihoods exceeding the threshold are labeled as anomalies. We set a threshold that 4% of the overall datapoints to be outliers and identified the corresponding threshold score which comes to -6.56. Thus, we look for points that posses higher negative log likelihoods than the threshold and label them as outliers.</p>
@@ -232,9 +232,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>ax0.scatter(df[<span class="st">'feature1'</span>], df[<span class="st">'feature2'</span>], c<span class="op">=</span>df[<span class="st">'anomaly_indicator'</span>], cmap<span class="op">=</span><span class="st">'rainbow'</span>)</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># GMM Predictions</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'GMM Predicted Anomalies</span><span class="ch">\n</span><span class="st">(threshold = -6.56)'</span>)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>ax1.scatter(df[<span class="st">'feature1'</span>], df[<span class="st">'feature2'</span>], c<span class="op">=</span>df[<span class="st">'anomaly_gmm_pct'</span>], cmap<span class="op">=</span><span class="st">'rainbow'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>ax1.scatter(df[<span class="st">'feature1'</span>], df[<span class="st">'feature2'</span>], c<span class="op">=</span>df[<span class="st">'anomaly_gmm'</span>], cmap<span class="op">=</span><span class="st">'rainbow'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="4">
-<pre><code>&lt;matplotlib.collections.PathCollection at 0x7f4ea4da6250&gt;</code></pre>
+<pre><code>&lt;matplotlib.collections.PathCollection at 0x7fcb913ab890&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="blog5_files/figure-html/cell-5-output-2.png" width="578" height="449"></p>
@@ -245,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> precision_score, recall_score, f1_score, accuracy_score, confusion_matrix, roc_curve, auc</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> df[<span class="st">'anomaly_indicator'</span>]</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> df[<span class="st">'anomaly_gmm_pct'</span>]</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> df[<span class="st">'anomaly_gmm'</span>]</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate performance</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>precision <span class="op">=</span> precision_score(y_test, predictions)</span>
@@ -258,25 +258,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"F1 Score: </span><span class="sc">{</span>f1<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
 <span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Precision: 0.8095
-Recall: 0.8500
-F1 Score: 0.8293
-Accuracy: 0.9865</code></pre>
+<pre><code>Precision: 0.7143
+Recall: 0.7500
+F1 Score: 0.7317
+Accuracy: 0.9788</code></pre>
 </div>
 </div>
+<p>We now perform anomaly detection for a threshold value = -5.56 and see how it impacts the anomaly detection process by visualization, precision, recall and f1 scores.</p>
 <div class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the score threshold for anomaly</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>value_threshold <span class="op">=</span> <span class="op">-</span><span class="fl">5.5</span><span class="co"># Label the anomalies</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'anomaly_gmm_value'</span>] <span class="op">=</span> df[<span class="st">'score'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> x <span class="op">&lt;</span> value_threshold <span class="cf">else</span> <span class="dv">0</span>)<span class="co"># Visualize the actual and predicted anomalies</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'anomaly_gmm_v'</span>] <span class="op">=</span> df[<span class="st">'score'</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: <span class="dv">1</span> <span class="cf">if</span> x <span class="op">&lt;</span> value_threshold <span class="cf">else</span> <span class="dv">0</span>)<span class="co"># Visualize the actual and predicted anomalies</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>fig, (ax0, ax1)<span class="op">=</span>plt.subplots(<span class="dv">1</span>,<span class="dv">2</span>, sharey<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Ground truth</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>ax0.set_title(<span class="st">'Ground Truth</span><span class="ch">\n</span><span class="st">(threshold = -5.56)'</span>)</span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>ax0.scatter(df[<span class="st">'feature1'</span>], df[<span class="st">'feature2'</span>], c<span class="op">=</span>df[<span class="st">'anomaly_indicator'</span>], cmap<span class="op">=</span><span class="st">'rainbow'</span>)</span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co"># GMM Predictions</span></span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'GMM Predicted Anomalies</span><span class="ch">\n</span><span class="st">(threshold = -5.56)'</span>)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>ax1.scatter(df[<span class="st">'feature1'</span>], df[<span class="st">'feature2'</span>], c<span class="op">=</span>df[<span class="st">'anomaly_gmm_value'</span>], cmap<span class="op">=</span><span class="st">'rainbow'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>ax1.scatter(df[<span class="st">'feature1'</span>], df[<span class="st">'feature2'</span>], c<span class="op">=</span>df[<span class="st">'anomaly_gmm_v'</span>], cmap<span class="op">=</span><span class="st">'rainbow'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
-<pre><code>&lt;matplotlib.collections.PathCollection at 0x7f4ea50f0610&gt;</code></pre>
+<pre><code>&lt;matplotlib.collections.PathCollection at 0x7fcb65fb4c50&gt;</code></pre>
 </div>
 <div class="cell-output cell-output-display">
 <p><img src="blog5_files/figure-html/cell-7-output-2.png" width="578" height="449"></p>
@@ -286,7 +287,7 @@ Accuracy: 0.9865</code></pre>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> precision_score, recall_score, f1_score, accuracy_score, confusion_matrix, roc_curve, auc</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>y_test <span class="op">=</span> df[<span class="st">'anomaly_indicator'</span>]</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> df[<span class="st">'anomaly_gmm_value'</span>]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>predictions <span class="op">=</span> df[<span class="st">'anomaly_gmm_v'</span>]</span>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Evaluate performance</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>precision <span class="op">=</span> precision_score(y_test, predictions)</span>
@@ -299,21 +300,13 @@ Accuracy: 0.9865</code></pre>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"F1 Score: </span><span class="sc">{</span>f1<span class="sc">:.4f}</span><span class="ss">"</span>)</span>
 <span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>accuracy<span class="sc">:.4f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Precision: 0.6000
-Recall: 0.9000
-F1 Score: 0.7200
-Accuracy: 0.9731</code></pre>
+<pre><code>Precision: 0.2469
+Recall: 1.0000
+F1 Score: 0.3960
+Accuracy: 0.8827</code></pre>
 </div>
 </div>
-<p>Now, let’s look at metrics for evaluating if the anomalies are detected correctly.</p>
-<p>Notes:</p>
-<ol start="0" type="1">
-<li>Add Latex to all math formulation</li>
-<li>Naive Bayes Classifier - use a proper dataset, add more ml code</li>
-<li>Add accuracy numbers and if possible other metrics for Non Linear Regression - LR - use-case change code, variable names and parameters</li>
-<li>Classification - add EDA plots</li>
-<li>Anomaly detection - change code, variable names, parameters</li>
-</ol>
+<p>The threshold is very important for anaomaly detection as a lower threshold can be seen to classify normal data points as anomalies and reduces the accuracy, precision and recall as well.</p>
 </section>
 <section id="anomaly-detection-using-isolation-forest-and-pca" class="level2">
 <h2 class="anchored" data-anchor-id="anomaly-detection-using-isolation-forest-and-pca">Anomaly Detection using Isolation Forest and PCA</h2>
@@ -371,6 +364,7 @@ Accuracy: 0.9731</code></pre>
 <p><img src="blog5_files/figure-html/cell-9-output-2.png" width="662" height="523"></p>
 </div>
 </div>
+<p>Anomaly detection using Gaussian Mixture Models (GMM) and Isolation Forests with Principal Component Analysis (PCA) offers robust techniques for identifying unusual patterns in complex datasets. GMM excels in capturing intricate data distributions, while Isolation Forests efficiently isolate anomalies through tree-based structures. Incorporating PCA enhances dimensionality reduction, aiding in the identification of subtle anomalies. These methods find applications in diverse fields, including fraud detection, network security, and system health monitoring, where accurate anomaly identification is critical for ensuring the integrity and reliability of systems.</p>
 
 
 </section>

@@ -25,18 +25,24 @@ False Negatives (FN): Also known as Type II errors, the number of instances inco
 
 Precision, also known as positive predictive value, measures the accuracy of the positive predictions made by the model. It is the ratio of correctly predicted positive observations to the total predicted positives. Precision is particularly relevant when the cost of false positives is high.
 
-Precision =  TP/TP+FP
+$$
+\text{Precision} = \frac{\text{TP}}{\text{TP + FP}}
+$$
 
 Recall measures the ability of the model to capture all the positive instances. It is the ratio of correctly predicted positive observations to the total actual positives. The formula is:
 
-Recall= TP/TP+FN
- 
+$$
+\text{Recall} = \frac{\text{TP}}{\text{TP + FN}}
+$$ 
+
 Recall is important when the cost of false negatives is high, as it focuses on minimizing instances where positive cases are incorrectly classified as negative.
  
 The F1 score is the harmonic mean of precision and recall, providing a balanced measure that considers both false positives and false negatives. It ranges between 0 and 1, with higher values indicating better performance. The formula is:
 
-F1 Score=2× Precision x Recall/Precision + Recall
-​
+$$
+F1 = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision + Recall}}
+$$
+
 F1 score is particularly useful when there is an imbalance between the classes or when both false positives and false negatives need to be considered.
 
 ROC Curve: Receiver Operating Characteristic (ROC) curve is a graphical representation of a binary classification model's performance at various classification thresholds. It illustrates the trade-off between the true positive rate (sensitivity) and the false positive rate (1 - specificity) across different threshold values. The ROC curve is created by plotting the TPR against the FPR at various threshold values. The area under the ROC curve (AUC-ROC) is a common metric used to quantify the overall performance of the model. AUC-ROC ranges from 0 to 1, where a higher value indicates better performance.
@@ -47,25 +53,67 @@ Logistic Regression is a fundamental machine learning algorithm primarily used f
 
 Logistic regression can be used for binary and multi-class classification problems. The output is a probability that the given input belongs to a particular class. The sigmoid function (also called logistic function) is crucial in Logistic Regression. It maps any real-valued number to a value between 0 and 1.
 
-σ(z)= 1/(1+e^−z)
+$$
+\sigma(z) = \frac{1}{1 + e^{-z}}
+$$
 
-z is a linear combination of input features, and the sigmoid function ensures that the output is a probability. 
+$z$ is a linear combination of input features, and the sigmoid function ensures that the output is a probability. 
 
 The hypothesis function for Logistic Regression is defined as:
 
-h_θ(x)=σ(θ^Tx),
+$$
+h_{\theta}(x)=\sigma(\theta^{T}x),
+$$
 
-where θ are the parameters to be learned, and x is the input feature vector.
+where $\theta$ are the parameters to be learned, and x is the input feature vector.
 
 The cost function is defined as the negative log-likelihood:
-J(θ)=−1/m ∑_i=1 ^m [y^(i) log(h_θ(x^(i)))+(1−y^(i))log(1−h_θ)(x^(i))]
+
+$$
+J(\theta) = -\frac{1}{m} \sum_{i=1}^{m} \left[ y_i \log(h_{\theta}(x_i)) + (1 - y_i) \log(1 - h_{\theta}(x_i)) \right]
+$$
+
 Minimizing the cost function helps in finding the optimal parameters θ.
 
-We train the algorithm using Gradient Descent where the parameters θ are updated iteratively using the gradient descent algorithm, as follows,
+We train the algorithm using Gradient Descent where the parameters θ are updated iteratively using the gradient descent algorithm. We use the open-source "Titanic" dataset for Logistic Regression. In the Titanic dataset, the task is to predict whether a passenger survived or not based on various features. Specifically, the binary classification target variable is "Survived," which takes the value of 1 if the passenger survived and 0 if the passenger did not survive. The features used for prediction include information such as passenger class (Pclass), sex (Sex), age (Age), the number of siblings/spouses aboard (SibSp), the number of parents/children aboard (Parch), and the fare paid (Fare). The goal is to build a Logistic Regression model that can learn from these features and accurately classify whether a passenger survived the Titanic disaster or not.
 
-θ_j :=θ_j−α(1/m)∑i=1 ^m(h_θ(x^(i))−y^(i))x_j^(i) and α is the learning rate.
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-We use the open-source "Titanic" dataset for Logistic Regression. In the Titanic dataset, the task is to predict whether a passenger survived or not based on various features. Specifically, the binary classification target variable is "Survived," which takes the value of 1 if the passenger survived and 0 if the passenger did not survive. The features used for prediction include information such as passenger class (Pclass), sex (Sex), age (Age), the number of siblings/spouses aboard (SibSp), the number of parents/children aboard (Parch), and the fare paid (Fare). The goal is to build a Logistic Regression model that can learn from these features and accurately classify whether a passenger survived the Titanic disaster or not.
+# Load the Titanic dataset
+titanic_data = pd.read_csv('titanic.csv')
+
+# Display the first few rows of the dataset
+print(titanic_data.head())
+
+# Plot the distribution of the target variable (Survived)
+sns.countplot(x='Survived', data=titanic_data)
+plt.title('Distribution of Survived')
+plt.show()
+
+# Plot the distribution of Pclass (Passenger Class)
+sns.countplot(x='Pclass', data=titanic_data, hue='Survived')
+plt.title('Distribution of Passenger Class by Survived')
+plt.show()
+
+# Plot the distribution of Age
+sns.histplot(x='Age', data=titanic_data, kde=True)
+plt.title('Distribution of Age')
+plt.show()
+
+# Plot the distribution of Fare
+sns.histplot(x='Fare', data=titanic_data, kde=True)
+plt.title('Distribution of Fare')
+plt.show()
+
+# Plot the relationship between Pclass and Fare
+sns.scatterplot(x='Pclass', y='Fare', data=titanic_data, hue='Survived')
+plt.title('Relationship between Passenger Class and Fare by Survived')
+plt.show()
+```
+In this example, we use seaborn and matplotlib to create various plots, such as count plots, histograms, and scatter plots. The goal is to gain insights into the distribution of variables, relationships, and potential patterns that can aid in the classification task.
 
 ```{python}
 import numpy as np
@@ -149,14 +197,17 @@ A Decision Tree is a powerful and interpretable machine learning algorithm used 
 
 Gini Impurity (for Classification): Given a node with K classes, the Gini impurity (G) is calculated as:
 
-G=1−∑i=1K (p_i)^2
- 
-Here, p_i is the probability of class i in the node.
+$$
+\text{Gini}(S) = 1 - \sum_{i=1}^{K} p_i^2
+$$
+
+Here, $p_i$ is the probability of class i in the node.
 
 Information Gain (for Feature Selection): The information gain (IG) measures the reduction in entropy (or increase in purity) after a dataset is split on a particular feature. Higher information gain indicates a better feature for splitting.
 
-IG(D,A)=H(D)−∑v=1V ∣D_v∣/∣D| H(D_v) where D is the dataset, 
-A is the feature, V is the number of values for feature A, D_v is the subset of D for which feature A has the v-th value, and H is the entropy.
+$$
+\text{IG}(D, A) = \text{Impurity}(D) - \sum_{v \in \text{Values}(A)} \frac{|D_v|}{|D|} \cdot \text{Impurity}(D_v)
+$$
 
 Decision Rule: At each node, a decision rule is formed based on the selected feature and a threshold. For example, "If petal length ≤ 2.45 cm, go left; otherwise, go right."
 
@@ -171,6 +222,43 @@ The Decision Tree algorithm is defined as follows,
 4. Leaf Node Assignment: Each leaf node is assigned a class label based on the majority class of instances in that node.
 
 To illustrate, let's use the famous Iris dataset for multiclass classification. The goal is to predict the species of iris flowers based on features like sepal length, sepal width, petal length, and petal width. The code example in Python using scikit-learn demonstrates a simple decision tree classifier for this task.
+
+```{python}
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+
+# Load the Iris dataset
+iris = load_iris()
+iris_data = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+iris_data['target'] = iris.target
+iris_data['species'] = iris.target_names[iris.target]
+
+# Display the first few rows of the dataset
+print(iris_data.head())
+
+# Plot the distribution of the target variable (Species)
+sns.countplot(x='species', data=iris_data)
+plt.title('Distribution of Species')
+plt.show()
+
+# Pair plot to visualize relationships between features
+sns.pairplot(iris_data, hue='species', markers=["o", "s", "D"])
+plt.suptitle('Pair Plot of Iris Dataset', y=1.02)
+plt.show()
+
+# Box plot for each feature by Species
+plt.figure(figsize=(15, 8))
+for i, feature in enumerate(iris.feature_names):
+    plt.subplot(2, 2, i + 1)
+    sns.boxplot(x='species', y=feature, data=iris_data)
+    plt.title(f'Box Plot of {feature} by Species')
+plt.tight_layout()
+plt.show()
+```
+
+The boxplots show that there are no outliers that we need to remove. We are able to visualize the relationship between different features through the pairplots. We are able to see that the classes or different species are uniformly distributed in the dataset.
 
 ```{python}
 import numpy as np
@@ -248,6 +336,32 @@ One common algorithm used for multi-label classification is the k-Nearest Neighb
 Use cases for multi-label classification are diverse. For example, in text categorization, a document can belong to multiple topics simultaneously. In image classification, an image might contain several objects, each requiring its own label. Bioinformatics applications, such as predicting the functions of genes, also involve multi-label classification.
 
 The mathematical formulation for the multi-label KNN algorithm involves extending the traditional KNN approach to handle multiple labels. A straightforward strategy is to assign labels based on the majority vote among the k-nearest neighbors. However, more sophisticated methods, like distance-weighted voting or considering label relationships, can be employed to improve performance.
+
+```{python}
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_digits
+import seaborn as sns
+
+# Load the digit dataset
+digits = load_digits()
+
+# Display the first few images and their labels
+plt.figure(figsize=(12, 4))
+for i in range(10):
+    plt.subplot(2, 5, i + 1)
+    plt.imshow(digits.images[i], cmap='gray')
+    plt.title(f"Label: {digits.target[i]}")
+    plt.axis('off')
+plt.suptitle('Sample Images from the Digit Dataset', y=1.02)
+plt.show()
+
+# Plot the distribution of digit labels
+sns.countplot(x=digits.target)
+plt.title('Distribution of Digit Labels')
+plt.show()
+```
+
+We are able to see the sample images from the digit dataset and are also able to see that the different digit labels are uniformly distributed.
 
 ```{python}
 import numpy as np

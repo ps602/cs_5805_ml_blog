@@ -3,7 +3,7 @@ title: Probability Theory and Random Variables
 jupyter: python3
 ---
 
-In the tapestry of our daily experiences, uncertainty weaves its intricate threads, creating a landscape where the unknown is an ever-present companion. From deciding whether to carry an umbrella to predicting stock market trends, uncertainty surrounds us, shaping our decisions, actions, and perceptions. It is this pervasive uncertainty that beckons us to explore the realm of probability theory, a powerful tool that empowers us to navigate the unpredictable nature of the world.
+From deciding whether to carry an umbrella to predicting stock market trends, uncertainty surrounds us, shaping our decisions, actions, and perceptions. It is this pervasive uncertainty that beckons us to explore the realm of probability theory, a powerful tool that empowers us to navigate the unpredictable nature of the world.
 
 Enter probability theory, a mathematical framework designed to bring order to the chaos of uncertainty. Probability theory provides us with a systematic way to quantify and analyze uncertainty, offering a language to express the likelihood of different outcomes. It serves as a compass, guiding us through the fog of unpredictability and enabling us to make informed decisions in the face of ambiguity.
 
@@ -24,32 +24,41 @@ An event is a subset of the sample space, representing a specific outcome or a c
 ## Key Probability Rules
 
 **1. Probability of any Event:** The probability of an event A in the sample space S, P(A) cannot be negative or more than 1. The probability of all the events in the sample space S adds to 1.
-
+$$
             P(A) ≥ 0
-
+$$
+$$
             P(A) ≤ 1
-
+$$
+$$
             P(S) = 1
+$$
 
 **2. Addition Rule:** The addition rule is a fundamental concept that deals with the probability of the union of two or more events. For two events A and B, the probability of their union (A ∪ B) is given by:
-
+$$
             P(A ∪ B) = P(A) + P(B) − P(A ∩ B)
-
+$$
 This formula accounts for the overlap between events A and 
 B to avoid double-counting. The probability of the intersection P(A∩B) is subtracted to ensure accuracy.
 
 **3. Bayes Rule:** The multiplication rule governs the probability of the intersection of two events. For two events A and B, the probability of their intersection (A∩B) is given by:
-
+$$
             P(A ∩ B) = P(A)⋅P(B∣A)
-
+$$
 Here, P(B∣A) represents the conditional probability of event 
 B occurring given that event A has occurred. It expresses the probability of B within the context of A.
 
 **4. Independence Rule:** Two events, A and B, are considered independent if the occurrence (or non-occurrence) of one event has no influence on the probability of the other event.
 
-            P(A ∩ B) = P(A)⋅P(B)
-
-            P(A∣B) = P(A) and P(B∣A) = P(B)
+$$            
+            P(A ∩ B) = P(A)⋅P(B) 
+$$
+$$
+            P(A∣B) = P(A)
+$$
+$$
+            P(B∣A) = P(B)
+$$
 
 These fundamental probability rules lay the groundwork for more complex probability calculations, enabling us to analyze and predict the likelihood of various outcomes in uncertain scenarios. They are essential tools for decision-making and risk assessment in diverse fields, from statistics to finance and beyond.
 
@@ -99,7 +108,12 @@ Probability distributions form the basis for statistical inference. They allow u
 
 The uniform distribution is characterized by all outcomes being equally likely. Each value within a specified range has the same probability of occurring. The probability density function (PDF) for a continuous uniform distribution over the interval [a,b] is given by:
 
-            f(x)= 1/b−a  for a ≤ x ≤ b
+$$
+        f(x) = 1/(b−a) 
+$$
+$$
+        a ≤ x ≤ b
+$$
 
 Consider the example of rolling a fair six-sided die. Each face of the die has an equal chance of landing face up. If we assume the die is unbiased, the outcome of each roll follows a uniform distribution over the discrete values {1,2,3,4,5,6}. Each number has a probability of 1/6 of occurring.
 
@@ -135,13 +149,15 @@ plt.show()
 **Binomial Distribution**
 
 The binomial distribution models the number of successes in a fixed number of independent and identically distributed Bernoulli trials, where each trial has only two possible outcomes (usually termed as "success" and "failure"). The probability mass function (PMF) of a binomial distribution is given by:
-             
-             P(X=k)=( n_p_k ) p^k (1-p)^(n-k)
-​
+
+$$          
+             P(X=k )={n \choose k} p^{k} (1-p)^{(n-k)}
+​$$
+
 where:
-n is the number of trials,
-k is the number of successes,
-p is the probability of success on a single trial, and (1−p) is the probability of failure on a single trial.
+$n$ is the number of trials,
+$k$ is the number of successes,
+$p$ is the probability of success on a single trial, and $(1−p)$ is the probability of failure on a single trial.
 
 Consider the example of flipping a biased coin. Let's say you have a coin that has a 60% chance of landing heads (success) and a 40% chance of landing tails (failure). If you flip this coin 5 times, you can model the number of heads obtained using a binomial distribution.
 
@@ -168,16 +184,16 @@ plt.ylabel('Probability')
 plt.show()
 ```
 
-
 **Gaussian Distribution**
 
 The Gaussian distribution, also known as the normal distribution, is a continuous probability distribution that is symmetric around its mean. It is characterized by its bell-shaped curve. The probability density function (PDF) of a normal distribution is given by:
 
-f(x;μ,σ)= 1/σroot(2π) e -1/3(x-mu)/sigma^2 
+$$
+f(x |\mu, \sigma) = \frac{1}{\sigma \sqrt{2\pi}} \, e^{-\frac{1}{2}\left(\frac{x - \mu}{\sigma}\right)^2}$$
 
 where:
-μ is the mean,
-σ is the standard deviation
+$\mu$ is the mean,
+$\sigma$ is the standard deviation
 
 ```{python}
 import numpy as np
@@ -208,16 +224,16 @@ plt.legend()
 plt.show()
 ```
 
-
 **Poisson Distribution**
 
 The Poisson distribution models the number of events that occur in a fixed interval of time or space. It is often used for rare events with a known average rate of occurrence. The probability mass function (PMF) of a Poisson distribution is given by:
 
-Insert formula
 
-Insert defining elements
+$$          
+             f(x) = \lambda^{x}* \exp(-\lambda)/x!
+$$
 
-Consider a scenario where you are observing the number of customer arrivals at a store in a given hour, and you know that, on average, 5 customers arrive per hour. The Poisson distribution can be used to model the probability of observing a specific number of customer arrivals in that hour.
+The Poisson distribution is characterized by a single parameter, often denoted as λ (lambda), which represents the average rate of occurrence of the event per unit of time or space. Consider a scenario where you are observing the number of customer arrivals at a store in a given hour, and you know that, on average, 5 customers arrive per hour. The Poisson distribution can be used to model the probability of observing a specific number of customer arrivals in that hour.
 
 ```{python}
 import numpy as np
@@ -241,14 +257,15 @@ plt.ylabel('Probability')
 plt.show()
 ```
 
-
 **Exponential Distribution**
 
 The exponential distribution models the time between events in a Poisson process, where events occur continuously and independently at a constant average rate. It is characterized by its memoryless property, meaning that the probability of an event occurring in the next time unit is independent of the past. The probability density function (PDF) of an exponential distribution is given by:
 
-Insert formula
+$$
+f(x | \lambda) = \lambda \, e^{-\lambda x}
+$$
 
-Define elements
+The $\lambda$ is the rate parameter, and it determines the rate at which events occur. It is also equal to the reciprocal of the mean 
 
 Consider a scenario where customers arrive at a service point, and the time between successive arrivals follows an exponential distribution. This can be applied to model the inter-arrival times in a queue, the time between calls at a call center, or the time between arrivals of buses at a bus stop.
 
@@ -286,9 +303,15 @@ plt.show()
 
 The expected value of a discrete random variable X is a measure of the central tendency and is denoted by E(X). It is calculated as the sum of each possible value of X multiplied by its probability.
 
-Insert Formula
+$$
+E[X] = \sum_{x} x \cdot P(X=x)
+$$
 
-Add an example in die setting
+Let's consider the example of rolling a fair six-sided die. The possible outcomes are the numbers 1 through 6, each with a probability of 1/6 since the die is fair. The random variable X represents the outcome of a single roll of the die. The expectation $E[X]$ is calculated as the sum of each possible outcome multiplied by its probability
+
+$$
+E[X] = \sum_{i=1}^{6} x_i \cdot P(X=x_i) = \frac{1}{6} \cdot 1 + \frac{1}{6} \cdot 2 + \frac{1}{6} \cdot 3 + \frac{1}{6} \cdot 4 + \frac{1}{6} \cdot 5 + \frac{1}{6} \cdot 6
+$$
 
 
 ```{python}
@@ -304,7 +327,9 @@ print("Expected Value:", expected_value)
 
 For a continuous random variable X, the expected value is the integral of x times the probability density function (PDF).
 
-Insert Formula
+$$
+E[X] = \int_{-\infty}^{\infty} x \cdot f(x) \, dx
+$$
 
 Consider a continuous random variable X with a uniform distribution over the interval 
 [2,8].
@@ -323,9 +348,9 @@ print("Expected Value (Continuous):", expected_value_continuous)
 
 Variance measures the spread or variability of a random variable. For a discrete random variable X, the variance Var(X) is calculated as the sum of the squared differences between each value and the mean, weighted by their probabilities.
 
-Insert Formula
-
-Add an example in a die setting
+$$
+\text{Var}(X) = \sum_{i} (x_i - \mu)^2 \cdot P(X = x_i)
+$$
 
 ```{python}
 # Calculate the variance
@@ -335,7 +360,9 @@ print("Variance:", variance)
 
 For a continuous random variable X, the variance is the integral of (x−E(X))^2  times the PDF.
 
-Insert Formula
+$$
+\text{Var}(X) = \int_{-\infty}^{\infty} (x - \mu)^2 \cdot f(x) \, dx
+$$
 
 Consider a continuous random variable X with a uniform distribution over the interval 
 [2,8].
@@ -400,13 +427,15 @@ In machine learning, conditional probability is fundamental for tasks such as cl
 
 Bayes' Theorem is a powerful tool derived from conditional probability. It allows us to update the probability of a hypothesis based on new evidence. The formula is as follows:
 
-Insert formula
+$$
 P(A∣B) = P(B∣A)⋅P(A)/P(B)
+$$
+
 Where:
-P(A∣B) is the posterior probability (probability of A given B).
-P(B∣A) is the likelihood (probability of B given A).
-P(A) is the prior probability (probability of A).
-P(B) is the marginal likelihood (probability of B).
+$P(A∣B)$ is the posterior probability (probability of A given B).
+$P(B∣A)$ is the likelihood (probability of B given A).
+$P(A)$ is the prior probability (probability of A).
+$P(B)$ is the marginal likelihood (probability of B).
 
 Example: 
 
@@ -441,53 +470,71 @@ One of the classic examples of a probabilistic model in machine learning is the 
 
 The Bayes' theorem in the context of classification is as follows,
 
+$$
 P(A∣B) = P(B∣A)⋅P(A)/P(B)
+$$
 
-In the context of classification: P(A∣B) is the probability of class A given the observed features B.
-P(B∣A) is the likelihood of observing features B given class A.
-P(A) is the prior probability of class A.
-P(B) is the evidence probability, which is the same for all classes and can be ignored when comparing probabilities.
+In the context of classification: $P(A∣B)$ is the probability of class A given the observed features B.
+$P(B∣A)$ is the likelihood of observing features B given class A.
+$P(A)$ is the prior probability of class A.
+$P(B)$ is the evidence probability, which is the same for all classes and can be ignored when comparing probabilities.
 
 The "naive" assumption in Naive Bayes is that the features are conditionally independent given the class. This means that the presence or absence of a particular feature is assumed to be unrelated to the presence or absence of any other feature given the class.
 
+$$
 P(features∣class)=P(feature_1∣class)⋅P(feature_2∣class)⋅…⋅P(feature_n∣class)
+$$
 
 The Naive Bayes classifier calculates the probability of each class given the observed features and assigns the class with the highest probability as the prediction.
 
-Predicted Class = argmax_c P(class=c∣features)
+$$
+y_{pred} = argmax_c P(class=c∣features)
+$$
 
 Let's consider a text classification example where we want to classify emails as spam or not spam based on the occurrence of certain words.
 
 ```{python}
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.feature_extraction.text import CountVectorizer
+# Import necessary libraries
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn import metrics
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_breast_cancer
 
-# Sample data: emails and their labels
-emails = [
-    ('Get a brand new iPhone for free!', 'spam'),
-    ('Meeting at 2 pm in the conference room', 'not_spam'),
-    # Add more examples
-]
+# Load the Breast Cancer Wisconsin dataset
+cancer = load_breast_cancer()
+X = cancer.data
+y = cancer.target
 
-# Separate data into features (X) and labels (y)
-X, y = zip(*emails)
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Convert text data to numerical format using CountVectorizer
-vectorizer = CountVectorizer()
-X = vectorizer.fit_transform(X)
+# Create a Gaussian Naive Bayes classifier
+clf = GaussianNB()
 
-# Create and train the Multinomial Naive Bayes classifier
-classifier = MultinomialNB()
-classifier.fit(X, y)
+# Train the classifier
+clf.fit(X_train, y_train)
 
-# Make predictions for new data
-new_email = ['Congratulations! You have won a million dollars!']
-new_email_vectorized = vectorizer.transform(new_email)
-prediction = classifier.predict(new_email_vectorized)
+# Make predictions on the test set
+y_pred = clf.predict(X_test)
 
-print(f"The predicted class for the new email is: {prediction[0]}")
+# Calculate accuracy
+accuracy = metrics.accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy}")
+
+# Generate confusion matrix
+conf_matrix = metrics.confusion_matrix(y_test, y_pred)
+
+# Visualize confusion matrix
+plt.figure(figsize=(8, 6))
+sns.heatmap(conf_matrix, annot=True, fmt="d", cmap="Blues", xticklabels=cancer.target_names, yticklabels=cancer.target_names)
+plt.title("Confusion Matrix")
+plt.xlabel("Predicted")
+plt.ylabel("True")
+plt.show()
 ```
 
-In this example, we use the MultinomialNB class from scikit-learn to implement a Naive Bayes classifier. We have considered Multinomial Naive Bayes as it is suitable for discrete data, often used in text classification. It also assumes features represent word counts or frequencies. The CountVectorizer is used to convert text data into a numerical format that the classifier can handle. The model is then trained on the training set and evaluated on the test set.
+In this example, we use the Breast Cancer Wisconsin dataset, split it into training and testing sets, train a Gaussian Naive Bayes classifier, make predictions, calculate accuracy, and generate a confusion matrix. We can see our model is good as it has hugh accuracy on test set.
 
 This demonstrates how probability theory, particularly Bayes' Theorem, is applied in a machine learning context to build a probabilistic model for classification. Naive Bayes classifiers are widely used in spam detection, sentiment analysis, and other text classification tasks.

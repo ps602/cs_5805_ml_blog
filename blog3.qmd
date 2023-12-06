@@ -17,27 +17,33 @@ Linear Regression is a supervised machine learning algorithm used for predicting
 
 For a simple linear regression with one independent variable:
 
-            y=β0+β1⋅x+ε
+$$
+    y = \beta_0 + \beta_1x + \epsilon
+$$
 
-y: Dependent variable (the variable we want to predict)
-x: Independent variable (predictor variable)
-β0: Intercept (y-intercept), the value of y when x=0
-β1: Slope (gradient), represents the change in y for a unit change in x
-ε: Error term, represents the unobserved factors affecting y
+$y$: Dependent variable (the variable we want to predict)
+$x$: Independent variable (predictor variable)
+$\beta_0$: Intercept (y-intercept), the value of y when x=0
+$\beta_1$: Slope (gradient), represents the change in y for a unit change in x
+$\epsilon$: Error term, represents the unobserved factors affecting y
 
 The objective is to minimize the sum of squared differences between the observed (y) and predicted (y^) values:
 
-            J(β0,β1 )= 1/2m∑i=1m (y^i−yi)^2 where:
+$$
+\text{Minimize: } J = \frac{1}{2m} \sum_{i=1}^{m} (y_i - \hat{y}_i)^2
+$$
 
-m: Number of data points
-y^i: Predicted value for the i-th data point
-yi: Observed value for the i-th data point
+$m$: Number of data points
+$\hat{y}_i$: Predicted value for the i-th data point
+$y_i$: Observed value for the i-th data point
 
 Gradient Descent is commonly used to find the values of β0 and β1 that minimize the cost function J. The update rule is:
 
-            βj :=βj-α ∂/∂βj J(β0,β1) where
+$$
+\beta_j := \beta_j - \alpha \frac{1}{n} \sum_{i=1}^{n} (h_\theta(x_i) - y_i) \cdot x_{ij}
+$$
 
-α is the learning rate.
+$\alpha$ is the learning rate.
 
 We choose the "Advertising" dataset from Kaggle where we want to analyze the relationship between "TV Advertising" and "Sales". 
 
@@ -49,16 +55,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 
-# Load the California Housing dataset
-advertising = pd.read_csv('advertising.csv')
+# Load the dataset
+data = pd.read_csv('advertising.csv')
 
-advertising.head()
+data.head()
 ```
 
 We perform exploratory data analysis (EDA) on the data to understand the characteristics of the data, unveil patterns, detect anomalies, and gather insights that can guide subsequent analyses and modeling. We perform data wrangling, where the important steps include data cleaning by removal null-values and outliers.
 
 ```{python}
-advertising.describe()
+data.describe()
 ```
 
 Outliers in a dataset are often identified as points that fall beyond a specified distance from the edges of the box and whiskers. This distance is typically determined by a multiplier of the IQR, and data points beyond this range are considered potential outliers.
@@ -66,18 +72,18 @@ Outliers in a dataset are often identified as points that fall beyond a specifie
 ```{python}
 import seaborn as sns
 # Checking for outliers
-sns.boxplot(advertising['Sales'])
+sns.boxplot(data['Sales'])
 plt.show()
 ```
 
 Then we look at the feature interdependence using pairplots and the heatmap of the correlation between the different variables.
 
 ```{python}
-# Let's see how Sales are related with other variables using scatter plot.
-sns.pairplot(advertising, x_vars=['TV', 'Newspaper', 'Radio'], y_vars='Sales', height=4, aspect=1, kind='scatter')
+# Sales relation with other variables using scatter plot.
+sns.pairplot(data, x_vars=['TV', 'Newspaper', 'Radio'], y_vars='Sales', height=4, aspect=1, kind='scatter')
 plt.show()
-# Let's see the correlation between different variables.
-sns.heatmap(advertising.corr(), cmap="YlGnBu", annot = True)
+# correlation between different variables.
+sns.heatmap(data.corr(), cmap="YlGnBu", annot = True)
 plt.show()
 ```
 
@@ -90,15 +96,15 @@ from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
 from sklearn.linear_model import LinearRegression, Lasso, Ridge
 
-X = advertising['TV']
-y = advertising['Sales']
+X = data['TV']
+y = data['Sales']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = 0.7, test_size = 0.3, random_state = 100)
 
-# Add a constant to get an intercept
+# Adding a constant to get an intercept
 X_train_sm = sm.add_constant(X_train)
 
-# Fit the resgression line using 'OLS'
+# Fitting the resgression
 lr = sm.OLS(y_train, X_train_sm).fit()
 
 print(lr.summary())
@@ -127,7 +133,7 @@ The fit of the Linear Regression model can also be tested by seeing if the resid
 y_train_pred = lr.predict(X_train_sm)
 res = (y_train - y_train_pred)
 fig = plt.figure()
-sns.displot(res, bins = 15)                # Plot heading 
+sns.displot(res, bins = 15, kde=True)                # Plot heading 
 plt.xlabel('Residual')         # X-label
 plt.show()
 ```
@@ -158,8 +164,8 @@ Lasso Regression, or L1 regularization, is a linear regression technique that in
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression, Lasso, Ridge
 
-X = advertising['TV']
-y = advertising['Sales']
+X = data['TV']
+y = data['Sales']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = 0.7, test_size = 0.3, random_state = 100)
 
@@ -179,8 +185,8 @@ Ridge Regression, or L2 regularization, is another variant of linear regression 
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Lasso, Ridge
 
-X = advertising['TV']
-y = advertising['Sales']
+X = data['TV']
+y = data['Sales']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, train_size = 0.7, test_size = 0.3, random_state = 100)
 
@@ -242,14 +248,15 @@ Non-linear regression allows for more flexibility in modeling relationships that
 Polynomial regression is an extension of linear regression, allowing for the modeling of relationships that are not strictly linear. While linear regression assumes a linear relationship between the independent and dependent variables, polynomial regression accommodates curves and non-linear patterns. In polynomial regression, the relationship is represented by a polynomial equation, allowing for more flexibility in capturing complex patterns within the data. 
 
 The polynomial regression equation of degree n is given by:
-                Y=b0+b1X+b2X^2+…+bnX^n+ε
+$$
+y = \beta_0 + \beta_1 x + \beta_2 x^2 + \ldots + \beta_n x^n + \epsilon
+$$
 Here, 
-Y is the dependent variable, 
-X is the independent variable, 
-b0 is the intercept, 
-b1,b2,…,bn are the coefficients, 
-X^n represents the terms with increasing powers of 
-and ε is the error term.
+$y$ is the dependent variable, 
+$x$ is the independent variable, 
+$\beta_0$ is the intercept, 
+$\beta_1,\beta_2,…,\beta_n$ are the coefficients, 
+$x^n$ represents the terms with increasing powers of and $\epsilon$ is the error term.
 
 The coefficients are estimated from the data using methods like the method of least squares. We create a synthetic polynomial dataset to see how well the regressor is able to fit the polynomial function we have defined. We can see that the scatter plot below shows the data to be quadratic in nature as defined by our function y.
 
@@ -286,6 +293,8 @@ lin_reg.intercept_, lin_reg.coef_
 Once the model is trained, we use it to make predictions on new or unseen data. We can assess the performance of the model using appropriate metrics such as Mean Squared Error (MSE) or R-squared. We can visualize the fitted polynomial curve along with the data points to understand how well the model captures the underlying patterns.
 
 ```{python}
+from sklearn.metrics import r2_score
+
 X_new = np.linspace(-3, 3, 100).reshape(100, 1)
 X_new_poly = poly_features.transform(X_new)
 y_new = lin_reg.predict(X_new_poly)
@@ -328,3 +337,5 @@ plt.axis([-3, 3, 0, 10])
 plt.grid()
 plt.show()
 ```
+
+Linear regression is a fundamental tool for modeling relationships between variables through a linear equation. Lasso and Ridge regression, extensions of linear regression, introduce regularization to address issues like multicollinearity and overfitting. Lasso promotes sparsity, while Ridge penalizes large coefficients. Non-linear regression accommodates complex relationships. Linear regression is versatile, Lasso/Ridge are valuable for feature selection and regularization, and non-linear regression suits intricate data patterns. Applications include predicting house prices (linear), genomics (Lasso/Ridge), and modeling complex processes (non-linear). The choice depends on data characteristics and analysis goals.
